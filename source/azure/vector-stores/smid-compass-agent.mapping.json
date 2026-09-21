@@ -1,0 +1,129 @@
+﻿{
+    "agent":  "smid-compass-agent",
+    "vector_store_id":  "vs_0y343Ql82cSzqBk07avOxK2O",
+    "vector_store_name":  "index_boring_rabbit_cx3n0t4wkf",
+    "vector_store_status":  "completed",
+    "file_count":  8,
+    "files":  [
+                  {
+                      "file_id":  "assistant-6uaUj899yb1Un3XN3qXVzd",
+                      "filename":  "LOPNA 2015.pdf",
+                      "bytes":  26999221,
+                      "purpose":  "assistants",
+                      "vector_store_status":  "failed",
+                      "usage_bytes":  0,
+                      "chunking_strategy":  {
+                                                "type":  "static",
+                                                "static":  {
+                                                               "max_chunk_size_tokens":  800,
+                                                               "chunk_overlap_tokens":  400
+                                                           }
+                                            }
+                  },
+                  {
+                      "file_id":  "assistant-LJc4iLcgyCb6D3TbCGQ77V",
+                      "filename":  "ley-de-registro-de-antecedentes-penales.pdf",
+                      "bytes":  12428,
+                      "purpose":  "assistants",
+                      "vector_store_status":  "completed",
+                      "usage_bytes":  9383,
+                      "chunking_strategy":  {
+                                                "type":  "static",
+                                                "static":  {
+                                                               "max_chunk_size_tokens":  800,
+                                                               "chunk_overlap_tokens":  400
+                                                           }
+                                            }
+                  },
+                  {
+                      "file_id":  "assistant-SKdhcErxJDGaF7pCHQA8kM",
+                      "filename":  "presentacion general.pdf",
+                      "bytes":  1634377,
+                      "purpose":  "assistants",
+                      "vector_store_status":  "completed",
+                      "usage_bytes":  1086,
+                      "chunking_strategy":  {
+                                                "type":  "static",
+                                                "static":  {
+                                                               "max_chunk_size_tokens":  800,
+                                                               "chunk_overlap_tokens":  400
+                                                           }
+                                            }
+                  },
+                  {
+                      "file_id":  "assistant-Dc5TApFWxx9X52WSe8uSBp",
+                      "filename":  "Autorizacion envio pasaporte a domicilio (1).pdf.pdf",
+                      "bytes":  517272,
+                      "purpose":  "assistants",
+                      "vector_store_status":  "completed",
+                      "usage_bytes":  3116,
+                      "chunking_strategy":  {
+                                                "type":  "static",
+                                                "static":  {
+                                                               "max_chunk_size_tokens":  800,
+                                                               "chunk_overlap_tokens":  400
+                                                           }
+                                            }
+                  },
+                  {
+                      "file_id":  "assistant-FSxghh6GBPWesKdEm5sb64",
+                      "filename":  "ley-nacionalidad-ciudadania.pdf",
+                      "bytes":  110270,
+                      "purpose":  "assistants",
+                      "vector_store_status":  "completed",
+                      "usage_bytes":  46767,
+                      "chunking_strategy":  {
+                                                "type":  "static",
+                                                "static":  {
+                                                               "max_chunk_size_tokens":  800,
+                                                               "chunk_overlap_tokens":  400
+                                                           }
+                                            }
+                  },
+                  {
+                      "file_id":  "assistant-BeeQf539WCv4NV6z1H54sJ",
+                      "filename":  "Embajada de Venezuela en BerlÃ­n â Novedades y guÃ­a actualizada.pdf",
+                      "bytes":  111413,
+                      "purpose":  "assistants",
+                      "vector_store_status":  "completed",
+                      "usage_bytes":  3259,
+                      "chunking_strategy":  {
+                                                "type":  "static",
+                                                "static":  {
+                                                               "max_chunk_size_tokens":  800,
+                                                               "chunk_overlap_tokens":  400
+                                                           }
+                                            }
+                  },
+                  {
+                      "file_id":  "assistant-SncWcFLFxWYfWhMV96uoYe",
+                      "filename":  "GUIA RAPIDA SOBRE EL PROGRAMA DE TALLERES 2026.pdf",
+                      "bytes":  337959,
+                      "purpose":  "assistants",
+                      "vector_store_status":  "completed",
+                      "usage_bytes":  2806,
+                      "chunking_strategy":  {
+                                                "type":  "static",
+                                                "static":  {
+                                                               "max_chunk_size_tokens":  800,
+                                                               "chunk_overlap_tokens":  400
+                                                           }
+                                            }
+                  },
+                  {
+                      "file_id":  "assistant-Uht3XLijkD2vFZRUBSgzoT",
+                      "filename":  "Guia paso a paso para tramitar el pasaporte venezolano desde venezuela y desde el exterior.pdf",
+                      "bytes":  4430264,
+                      "purpose":  "assistants",
+                      "vector_store_status":  "completed",
+                      "usage_bytes":  24167,
+                      "chunking_strategy":  {
+                                                "type":  "static",
+                                                "static":  {
+                                                               "max_chunk_size_tokens":  800,
+                                                               "chunk_overlap_tokens":  400
+                                                           }
+                                            }
+                  }
+              ]
+}

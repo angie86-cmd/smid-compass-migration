@@ -1,0 +1,317 @@
+{
+  "note": "This is a DERIVED migration correlation manifest, built from source/azure/vector-stores/*.mapping.json (raw Foundry exports) cross-referenced against source/inventory/data-files-manifest.json (physical repository files). It is not itself a raw Azure export.",
+  "tenant_id_warning": "vector_store_id and source_file_id values below are historical identifiers from the SOURCE Azure/Foundry tenant. They are preserved here only for traceability and MUST NOT be reused, referenced, or assumed valid when creating vector stores/files in the nonprofit tenant. New identifiers will be generated there upon re-upload.",
+  "agents": [
+    {
+      "agent": "SMID-PassGuide",
+      "source_vector_store_id": "vs_kFHmEd5wmTctKaPyut53MRf0",
+      "source_vector_store_name": "index_frank_cabbage_m0h3tsdlyy",
+      "source_vector_store_status": "completed",
+      "role": "active",
+      "files": [
+        {
+          "source_file_id": "assistant-Y8y6MrRDSoaRowYVy4T8Kf",
+          "source_filename": "PassInfoFromIG.pdf",
+          "local_filename": "PassInfoFromIG.pdf",
+          "local_relative_path": "source/data/SMID training info/PassInfoFromIG.pdf",
+          "local_sha256": "a4e8f44c2f24f77fa7887851e37349be22d3c664bb61b1e1883795c9375d4476",
+          "source_vector_status": "completed",
+          "source_usage_bytes": 1084,
+          "chunking_strategy": {
+            "type": "static",
+            "max_chunk_size_tokens": 800,
+            "chunk_overlap_tokens": 400
+          },
+          "local_match_status": "matched"
+        },
+        {
+          "source_file_id": "assistant-XqU9H6scexYYcTVz3tjWpL",
+          "source_filename": "Guia paso a paso para tramitar el pasaporte venezolano desde venezuela y desde el exterior.pdf",
+          "local_filename": "Guia paso a paso para tramitar el pasaporte venezolano desde venezuela y desde el exterior.pdf",
+          "local_relative_path": "source/data/SMID training info/Guia paso a paso para tramitar el pasaporte venezolano desde venezuela y desde el exterior.pdf",
+          "local_sha256": "910116fc0999cb91ce84ee9e340a4eaf9201fa1db6d339ceb809152d5bc25894",
+          "source_vector_status": "completed",
+          "source_usage_bytes": 24167,
+          "chunking_strategy": {
+            "type": "static",
+            "max_chunk_size_tokens": 800,
+            "chunk_overlap_tokens": 400
+          },
+          "local_match_status": "matched"
+        },
+        {
+          "source_file_id": "assistant-NJDEajAV6NjrcAkRWGsCdJ",
+          "source_filename": "Embajada de Venezuela en BerlÃ­n â Novedades y guÃ­a actualizada.pdf",
+          "local_filename": "Embajada de Venezuela en Berlín – Novedades y guía actualizada.pdf",
+          "local_relative_path": "source/data/SMID training info/Embajada de Venezuela en Berlín – Novedades y guía actualizada.pdf",
+          "local_sha256": "4eca5cb4d662e09f2dfeb6530f9f658628bbcf6bb6e0b9edcaa7aa254fe81991",
+          "source_vector_status": "completed",
+          "source_usage_bytes": 3259,
+          "chunking_strategy": {
+            "type": "static",
+            "max_chunk_size_tokens": 800,
+            "chunk_overlap_tokens": 400
+          },
+          "local_match_status": "matched",
+          "match_note": "source_filename contains encoding/mojibake corruption from the source tenant export; local_filename is the corresponding physical file, matched by normalized (ASCII-alnum) filename comparison."
+        }
+      ]
+    },
+    {
+      "agent": "SMID-WorkshopGuide",
+      "source_vector_store_id": "vs_i72YNBIWpR8vyXns4tb2e4vC",
+      "source_vector_store_name": "index_upbeat_juice_9z10slm1b2",
+      "source_vector_store_status": "completed",
+      "role": "active",
+      "files": [
+        {
+          "source_file_id": "assistant-CzH2EXdhGv1Rm7KMM5DuhR",
+          "source_filename": "WorkshopsInfoFromIG.pdf",
+          "local_filename": "WorkshopsInfoFromIG.pdf",
+          "local_relative_path": "source/data/SMID training info/WorkshopsInfoFromIG.pdf",
+          "local_sha256": "895580a9813a05a1d14f865c9c47a697aa67094269d3972b21d40fc3ba014ab5",
+          "source_vector_status": "completed",
+          "source_usage_bytes": 1084,
+          "chunking_strategy": {
+            "type": "static",
+            "max_chunk_size_tokens": 800,
+            "chunk_overlap_tokens": 400
+          },
+          "local_match_status": "matched"
+        },
+        {
+          "source_file_id": "assistant-7r73TS1yhdzuimLukuz81b",
+          "source_filename": "GUIA RAPIDA SOBRE EL PROGRAMA DE TALLERES 2026.pdf",
+          "local_filename": "GUIA RAPIDA SOBRE EL PROGRAMA DE TALLERES 2026.pdf",
+          "local_relative_path": "source/data/SMID training info/GUIA RAPIDA SOBRE EL PROGRAMA DE TALLERES 2026.pdf",
+          "local_sha256": "eabd2936a37ca3c85253d50ad4acd293b0747962b72ce3d382958a955e2c5014",
+          "source_vector_status": "completed",
+          "source_usage_bytes": 2806,
+          "chunking_strategy": {
+            "type": "static",
+            "max_chunk_size_tokens": 800,
+            "chunk_overlap_tokens": 400
+          },
+          "local_match_status": "matched"
+        }
+      ]
+    },
+    {
+      "agent": "smid-compass-agent",
+      "source_vector_store_id": "vs_0y343Ql82cSzqBk07avOxK2O",
+      "source_vector_store_name": "index_boring_rabbit_cx3n0t4wkf",
+      "source_vector_store_status": "completed",
+      "role": "legacy_candidate",
+      "files": [
+        {
+          "source_file_id": "assistant-6uaUj899yb1Un3XN3qXVzd",
+          "source_filename": "LOPNA 2015.pdf",
+          "local_filename": "LOPNA 2015.pdf",
+          "local_relative_path": "source/data/SMID training info/LOPNA 2015.pdf",
+          "local_sha256": "672f8b6ef5c4325a3526b2f179aaea18bd8ba595d34859137a76e6ff06e47871",
+          "source_vector_status": "failed",
+          "source_usage_bytes": 0,
+          "chunking_strategy": {
+            "type": "static",
+            "max_chunk_size_tokens": 800,
+            "chunk_overlap_tokens": 400
+          },
+          "local_match_status": "matched"
+        },
+        {
+          "source_file_id": "assistant-LJc4iLcgyCb6D3TbCGQ77V",
+          "source_filename": "ley-de-registro-de-antecedentes-penales.pdf",
+          "local_filename": "ley-de-registro-de-antecedentes-penales.pdf",
+          "local_relative_path": "source/data/SMID training info/ley-de-registro-de-antecedentes-penales.pdf",
+          "local_sha256": "738f83d96e0f13a254acc1bbdfaa2e7973360afede09f8610837abe1b484b46c",
+          "source_vector_status": "completed",
+          "source_usage_bytes": 9383,
+          "chunking_strategy": {
+            "type": "static",
+            "max_chunk_size_tokens": 800,
+            "chunk_overlap_tokens": 400
+          },
+          "local_match_status": "matched"
+        },
+        {
+          "source_file_id": "assistant-SKdhcErxJDGaF7pCHQA8kM",
+          "source_filename": "presentacion general.pdf",
+          "local_filename": "presentacion general.pdf",
+          "local_relative_path": "source/data/SMID training info/presentacion general.pdf",
+          "local_sha256": "86b29888cff54baed50d3a3607b8da4b0b8aabb51f24c5a8440fc50f39551056",
+          "source_vector_status": "completed",
+          "source_usage_bytes": 1086,
+          "chunking_strategy": {
+            "type": "static",
+            "max_chunk_size_tokens": 800,
+            "chunk_overlap_tokens": 400
+          },
+          "local_match_status": "matched"
+        },
+        {
+          "source_file_id": "assistant-Dc5TApFWxx9X52WSe8uSBp",
+          "source_filename": "Autorizacion envio pasaporte a domicilio (1).pdf.pdf",
+          "local_filename": "Autorizacion envio pasaporte a domicilio (1).pdf.pdf",
+          "local_relative_path": "source/data/SMID training info/Autorizacion envio pasaporte a domicilio (1).pdf.pdf",
+          "local_sha256": "eafb953d3489c6b89128d82ef17dd561e78e465481428cbc056f8b99c0b16510",
+          "source_vector_status": "completed",
+          "source_usage_bytes": 3116,
+          "chunking_strategy": {
+            "type": "static",
+            "max_chunk_size_tokens": 800,
+            "chunk_overlap_tokens": 400
+          },
+          "local_match_status": "matched"
+        },
+        {
+          "source_file_id": "assistant-FSxghh6GBPWesKdEm5sb64",
+          "source_filename": "ley-nacionalidad-ciudadania.pdf",
+          "local_filename": "ley-nacionalidad-ciudadania.pdf",
+          "local_relative_path": "source/data/SMID training info/ley-nacionalidad-ciudadania.pdf",
+          "local_sha256": "07b94dc959be3d1e1c253eea9c444c5c0f97347f731dd9dfbdfe3d53a0f5ae91",
+          "source_vector_status": "completed",
+          "source_usage_bytes": 46767,
+          "chunking_strategy": {
+            "type": "static",
+            "max_chunk_size_tokens": 800,
+            "chunk_overlap_tokens": 400
+          },
+          "local_match_status": "matched"
+        },
+        {
+          "source_file_id": "assistant-BeeQf539WCv4NV6z1H54sJ",
+          "source_filename": "Embajada de Venezuela en BerlÃ­n â Novedades y guÃ­a actualizada.pdf",
+          "local_filename": "Embajada de Venezuela en Berlín – Novedades y guía actualizada.pdf",
+          "local_relative_path": "source/data/SMID training info/Embajada de Venezuela en Berlín – Novedades y guía actualizada.pdf",
+          "local_sha256": "4eca5cb4d662e09f2dfeb6530f9f658628bbcf6bb6e0b9edcaa7aa254fe81991",
+          "source_vector_status": "completed",
+          "source_usage_bytes": 3259,
+          "chunking_strategy": {
+            "type": "static",
+            "max_chunk_size_tokens": 800,
+            "chunk_overlap_tokens": 400
+          },
+          "local_match_status": "matched",
+          "match_note": "source_filename contains encoding/mojibake corruption from the source tenant export; local_filename is the corresponding physical file, matched by normalized (ASCII-alnum) filename comparison."
+        },
+        {
+          "source_file_id": "assistant-SncWcFLFxWYfWhMV96uoYe",
+          "source_filename": "GUIA RAPIDA SOBRE EL PROGRAMA DE TALLERES 2026.pdf",
+          "local_filename": "GUIA RAPIDA SOBRE EL PROGRAMA DE TALLERES 2026.pdf",
+          "local_relative_path": "source/data/SMID training info/GUIA RAPIDA SOBRE EL PROGRAMA DE TALLERES 2026.pdf",
+          "local_sha256": "eabd2936a37ca3c85253d50ad4acd293b0747962b72ce3d382958a955e2c5014",
+          "source_vector_status": "completed",
+          "source_usage_bytes": 2806,
+          "chunking_strategy": {
+            "type": "static",
+            "max_chunk_size_tokens": 800,
+            "chunk_overlap_tokens": 400
+          },
+          "local_match_status": "matched"
+        },
+        {
+          "source_file_id": "assistant-Uht3XLijkD2vFZRUBSgzoT",
+          "source_filename": "Guia paso a paso para tramitar el pasaporte venezolano desde venezuela y desde el exterior.pdf",
+          "local_filename": "Guia paso a paso para tramitar el pasaporte venezolano desde venezuela y desde el exterior.pdf",
+          "local_relative_path": "source/data/SMID training info/Guia paso a paso para tramitar el pasaporte venezolano desde venezuela y desde el exterior.pdf",
+          "local_sha256": "910116fc0999cb91ce84ee9e340a4eaf9201fa1db6d339ceb809152d5bc25894",
+          "source_vector_status": "completed",
+          "source_usage_bytes": 24167,
+          "chunking_strategy": {
+            "type": "static",
+            "max_chunk_size_tokens": 800,
+            "chunk_overlap_tokens": 400
+          },
+          "local_match_status": "matched"
+        }
+      ]
+    }
+  ],
+  "unreferenced_local_files": [
+    {
+      "filename": "About Us – Save My Identity.pdf",
+      "relative_path": "source/data/SMID training info/About Us – Save My Identity.pdf",
+      "sha256": "e3e3c95f6ebdf8fd63fe7654a4d49d79542fe26c5c6531263642c799c812b38b"
+    },
+    {
+      "filename": "671588739_10167073633463275_3749182194410791953_n.jpg",
+      "relative_path": "source/data/SMID training info/bilder/671588739_10167073633463275_3749182194410791953_n.jpg",
+      "sha256": "bad04c073f6fcc4a2d50fc7a0e108d4a136ce52f9fe4425b5b06e3cc64260da5"
+    },
+    {
+      "filename": "672200200_10167073633493275_270115175168316459_n.jpg",
+      "relative_path": "source/data/SMID training info/bilder/672200200_10167073633493275_270115175168316459_n.jpg",
+      "sha256": "6d85be9c054583b285d9cdf16db4fb4f03fc17c5d765851b579ee69177a1674f"
+    },
+    {
+      "filename": "672387850_10167073633333275_1190254541526429492_n.jpg",
+      "relative_path": "source/data/SMID training info/bilder/672387850_10167073633333275_1190254541526429492_n.jpg",
+      "sha256": "7a1a3d28a1fb84886197decf334bbfe9616f088d5b6b7b74c571f716edbbd698"
+    },
+    {
+      "filename": "672662247_10167073633448275_2304054682470660672_n.jpg",
+      "relative_path": "source/data/SMID training info/bilder/672662247_10167073633448275_2304054682470660672_n.jpg",
+      "sha256": "533e6b3888e8e1defc1bf1ee201b85b153ff345cadc270ed64962e4c01a2d948"
+    },
+    {
+      "filename": "672670484_10167073633323275_3800485310534203596_n.jpg",
+      "relative_path": "source/data/SMID training info/bilder/672670484_10167073633323275_3800485310534203596_n.jpg",
+      "sha256": "333c1869ffe87d78cc46fcad4f714cca55c826d84769f2092bfe90f6cc316f64"
+    },
+    {
+      "filename": "672681034_10167073605768275_6767509287905858053_n.jpg",
+      "relative_path": "source/data/SMID training info/bilder/672681034_10167073605768275_6767509287905858053_n.jpg",
+      "sha256": "4027fc09797848b8b8f46b42a30c8f4cdb3750cf613b8a8653090134773329b8"
+    },
+    {
+      "filename": "672686971_10167073584388275_6773805932267692802_n.jpg",
+      "relative_path": "source/data/SMID training info/bilder/672686971_10167073584388275_6773805932267692802_n.jpg",
+      "sha256": "01b57a1d3ae7eff89101e8a7e7971b99631f8bf52dccf3d0b2ae3531c35c7876"
+    },
+    {
+      "filename": "678820113_10167115580298275_1905831062846623747_n.jpg",
+      "relative_path": "source/data/SMID training info/bilder/678820113_10167115580298275_1905831062846623747_n.jpg",
+      "sha256": "8e6410e068b8918cade57fe791b57cac394439535b240d4731eea47af60a8f79"
+    },
+    {
+      "filename": "logo.png.png",
+      "relative_path": "source/data/SMID training info/bilder/logo.png.png",
+      "sha256": "c779ac56eb07b434c782bd733f7a991c90030fee012e0766cd2d0ce7d93901de"
+    },
+    {
+      "filename": "BMI Schreib Reiseausw.pdf",
+      "relative_path": "source/data/SMID training info/BMI Schreib Reiseausw.pdf",
+      "sha256": "21a57946a5da63a4741bee82036e068a9afb52133bb01c55110845e904eb1b95"
+    },
+    {
+      "filename": "CONSULADOS. Preguntas y Respuestas. _ Facebook.pdf",
+      "relative_path": "source/data/SMID training info/CONSULADOS. Preguntas y Respuestas. _ Facebook.pdf",
+      "sha256": "c6402bd02957ec9ec83496a7cc822f79b41ef8f011fb9d70b2e43d85f79bd6be"
+    },
+    {
+      "filename": "FAQ – Save My Identity.pdf",
+      "relative_path": "source/data/SMID training info/FAQ – Save My Identity.pdf",
+      "sha256": "a1d9b21821e82678b3aea4c9b806900a638f585c101902761b509ecb62adfa25"
+    },
+    {
+      "filename": "Presentación Manual de Marca Profesional smid.pdf",
+      "relative_path": "source/data/SMID training info/Presentación Manual de Marca Profesional smid.pdf",
+      "sha256": "a36048d95a84528704a9092033e5e07b0f4f52a653a94fed8a71eb82e32e53bf"
+    },
+    {
+      "filename": "SAIME. SALIR DE VENEZ CON DOBLE NACION.pdf",
+      "relative_path": "source/data/SMID training info/SAIME. SALIR DE VENEZ CON DOBLE NACION.pdf",
+      "sha256": "6f94ebf68f5f2546448dba4dfb5e678b9b9d5bad4390ee6e921ab63ba00ee7d3"
+    }
+  ],
+  "summary": {
+    "agents_with_file_search": 3,
+    "source_vector_stores": 3,
+    "vector_store_file_memberships": 13,
+    "matched_local_files": 13,
+    "missing_local_files": 0,
+    "ambiguous_matches": 0,
+    "failed_source_vector_files": 1,
+    "unreferenced_local_file_count": 15
+  }
+}

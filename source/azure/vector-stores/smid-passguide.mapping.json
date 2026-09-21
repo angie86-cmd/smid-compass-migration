@@ -1,0 +1,54 @@
+﻿{
+    "agent":  "SMID-PassGuide",
+    "vector_store_id":  "vs_kFHmEd5wmTctKaPyut53MRf0",
+    "vector_store_name":  "index_frank_cabbage_m0h3tsdlyy",
+    "vector_store_status":  "completed",
+    "file_count":  3,
+    "files":  [
+                  {
+                      "file_id":  "assistant-Y8y6MrRDSoaRowYVy4T8Kf",
+                      "filename":  "PassInfoFromIG.pdf",
+                      "bytes":  1019575,
+                      "purpose":  "assistants",
+                      "vector_store_status":  "completed",
+                      "usage_bytes":  1084,
+                      "chunking_strategy":  {
+                                                "type":  "static",
+                                                "static":  {
+                                                               "max_chunk_size_tokens":  800,
+                                                               "chunk_overlap_tokens":  400
+                                                           }
+                                            }
+                  },
+                  {
+                      "file_id":  "assistant-XqU9H6scexYYcTVz3tjWpL",
+                      "filename":  "Guia paso a paso para tramitar el pasaporte venezolano desde venezuela y desde el exterior.pdf",
+                      "bytes":  4430264,
+                      "purpose":  "assistants",
+                      "vector_store_status":  "completed",
+                      "usage_bytes":  24167,
+                      "chunking_strategy":  {
+                                                "type":  "static",
+                                                "static":  {
+                                                               "max_chunk_size_tokens":  800,
+                                                               "chunk_overlap_tokens":  400
+                                                           }
+                                            }
+                  },
+                  {
+                      "file_id":  "assistant-NJDEajAV6NjrcAkRWGsCdJ",
+                      "filename":  "Embajada de Venezuela en BerlÃ­n â Novedades y guÃ­a actualizada.pdf",
+                      "bytes":  111413,
+                      "purpose":  "assistants",
+                      "vector_store_status":  "completed",
+                      "usage_bytes":  3259,
+                      "chunking_strategy":  {
+                                                "type":  "static",
+                                                "static":  {
+                                                               "max_chunk_size_tokens":  800,
+                                                               "chunk_overlap_tokens":  400
+                                                           }
+                                            }
+                  }
+              ]
+}

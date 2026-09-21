@@ -1,0 +1,39 @@
+﻿{
+    "agent":  "SMID-WorkshopGuide",
+    "vector_store_id":  "vs_i72YNBIWpR8vyXns4tb2e4vC",
+    "vector_store_name":  "index_upbeat_juice_9z10slm1b2",
+    "vector_store_status":  "completed",
+    "file_count":  2,
+    "files":  [
+                  {
+                      "file_id":  "assistant-CzH2EXdhGv1Rm7KMM5DuhR",
+                      "filename":  "WorkshopsInfoFromIG.pdf",
+                      "bytes":  1019575,
+                      "purpose":  "assistants",
+                      "vector_store_status":  "completed",
+                      "usage_bytes":  1084,
+                      "chunking_strategy":  {
+                                                "type":  "static",
+                                                "static":  {
+                                                               "max_chunk_size_tokens":  800,
+                                                               "chunk_overlap_tokens":  400
+                                                           }
+                                            }
+                  },
+                  {
+                      "file_id":  "assistant-7r73TS1yhdzuimLukuz81b",
+                      "filename":  "GUIA RAPIDA SOBRE EL PROGRAMA DE TALLERES 2026.pdf",
+                      "bytes":  337959,
+                      "purpose":  "assistants",
+                      "vector_store_status":  "completed",
+                      "usage_bytes":  2806,
+                      "chunking_strategy":  {
+                                                "type":  "static",
+                                                "static":  {
+                                                               "max_chunk_size_tokens":  800,
+                                                               "chunk_overlap_tokens":  400
+                                                           }
+                                            }
+                  }
+              ]
+}
