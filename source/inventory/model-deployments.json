@@ -1,0 +1,18 @@
+{
+  "deployments": [
+    {
+      "deployment_name": "gpt-4.1-mini",
+      "model": "gpt-4.1-mini",
+      "version": "2025-04-14",
+      "deployment_type": "GlobalStandard",
+      "location": "swedencentral"
+    },
+    {
+      "deployment_name": "text-embedding-3-small",
+      "model": "text-embedding-3-small",
+      "version": "1",
+      "deployment_type": "GlobalStandard",
+      "location": "swedencentral"
+    }
+  ]
+}

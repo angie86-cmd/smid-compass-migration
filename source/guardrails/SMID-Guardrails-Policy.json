@@ -1,0 +1,55 @@
+{
+  "name": "SMID-Guardrails-Policy",
+  "type": "Agent",
+  "jailbreak": {
+    "intervention_point": [
+      "user_input"
+    ],
+    "action": "block"
+  },
+  "content_safety": {
+    "hate": {
+      "level": "highest_blocking",
+      "intervention_points": [
+        "user_input",
+        "output"
+      ],
+      "action": "block"
+    },
+    "self_harm": {
+      "level": "highest_blocking",
+      "intervention_points": [
+        "user_input",
+        "output"
+      ],
+      "action": "block"
+    },
+    "sexual": {
+      "level": "highest_blocking",
+      "intervention_points": [
+        "user_input",
+        "output"
+      ],
+      "action": "block"
+    },
+    "violence": {
+      "level": "highest_blocking",
+      "intervention_points": [
+        "user_input",
+        "output"
+      ],
+      "action": "block"
+    }
+  },
+  "applied_to": [
+    "SMID-RouterAgent",
+    "SMID-WorkshopGuide",
+    "SMID-SafetyAgent",
+    "SMID-PassGuide",
+    "smid-compass-agent"
+  ],
+  "notes": [
+    "OutOfScopeAgent was not listed as using this guardrail in the source environment.",
+    "Microsoft.DefaultV2 was applied at model deployment level."
+  ]
+}

@@ -1,0 +1,34 @@
+{
+    "id": "/subscriptions/82188448-a9e4-4f5b-8bc2-91f7bc91e06c/resourceGroups/rg-angienet-3518/providers/Microsoft.CognitiveServices/accounts/smid-compass-resource/projects/smid-compass",
+    "name": "smid-compass-resource/smid-compass",
+    "type": "Microsoft.CognitiveServices/accounts/projects",
+    "etag": "\"09026b1c-0000-4700-0000-69f5c8600000\"",
+    "location": "swedencentral",
+    "kind": "AIServices",
+    "properties": {
+        "endpoints": {
+            "AI Foundry API": "https://smid-compass-resource.services.ai.azure.com/api/projects/smid-compass"
+        },
+        "agentIdentity": {
+            "agentIdentityId": "b2834dd5-c4c9-4bae-aded-fb3d1451d463",
+            "agentIdentityBlueprintId": "d45db628-2782-453a-bb95-a5bac595fab1",
+            "agentIdentityBlueprintObjectId": "d45db628-2782-453a-bb95-a5bac595fab1"
+        },
+        "isDefault": true,
+        "internalId": "d73319ec76454ed894a7af57d13495e8",
+        "provisioningState": "Succeeded"
+    },
+    "identity": {
+        "principalId": "7476535e-8afe-4b3c-a6e7-7b4708d95205",
+        "tenantId": "c7efdcb5-8279-4ef8-b999-22f9a4ad8c9d",
+        "type": "SystemAssigned"
+    },
+    "systemData": {
+        "createdBy": "angienet@live.de",
+        "createdByType": "User",
+        "createdAt": "2026-05-02T09:18:40.4468869Z",
+        "lastModifiedBy": "angienet@live.de",
+        "lastModifiedByType": "User",
+        "lastModifiedAt": "2026-05-02T09:18:40.4468869Z"
+    }
+}

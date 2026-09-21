@@ -1,0 +1,18 @@
+{
+  "resource_group": "rg-angienet-3518",
+  "foundry_resource": "smid-compass-resource",
+  "foundry_project": "smid-compass",
+  "location": "swedencentral",
+  "pricing_tier": "S0",
+  "public_network_access": "Enabled",
+  "application_insights": "smid-compass-resource-appinsights",
+  "log_analytics": "smid-compass-resource-logs",
+  "external_azure_ai_search": false,
+  "external_storage_account": false,
+  "foundry_iq_knowledge_base": false,
+  "memory_configured": false,
+  "additional_services_configured": false,
+  "external_tools_configured": false,
+  "evaluations_to_migrate": false,
+  "fine_tuning_configured": false
+}
