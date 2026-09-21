@@ -1,0 +1,146 @@
+﻿[
+  {
+    "etag": "\"3da2a8ac-92c0-490b-93a3-26e8c4c772d8\"",
+    "id": "/subscriptions/82188448-a9e4-4f5b-8bc2-91f7bc91e06c/resourceGroups/rg-angienet-3518/providers/Microsoft.CognitiveServices/accounts/smid-compass-resource/deployments/gpt-4.1-mini",
+    "name": "gpt-4.1-mini",
+    "properties": {
+      "callRateLimit": null,
+      "capabilities": {
+        "agentsV2": "true",
+        "area": "EUR",
+        "assistants": "true",
+        "chatCompletion": "true",
+        "responses": "true"
+      },
+      "capacitySettings": null,
+      "currentCapacity": 50,
+      "deploymentState": "Running",
+      "dynamicThrottlingEnabled": null,
+      "model": {
+        "callRateLimit": null,
+        "format": "OpenAI",
+        "name": "gpt-4.1-mini",
+        "publisher": null,
+        "source": null,
+        "sourceAccount": null,
+        "version": "2025-04-14"
+      },
+      "parentDeploymentName": null,
+      "provisioningState": "Succeeded",
+      "raiPolicyName": "Microsoft.DefaultV2",
+      "rateLimits": [
+        {
+          "count": 50.0,
+          "dynamicThrottlingEnabled": null,
+          "key": "request",
+          "matchPatterns": null,
+          "minCount": null,
+          "renewalPeriod": 60.0
+        },
+        {
+          "count": 50000.0,
+          "dynamicThrottlingEnabled": null,
+          "key": "token",
+          "matchPatterns": null,
+          "minCount": null,
+          "renewalPeriod": 60.0
+        }
+      ],
+      "routing": null,
+      "scaleSettings": null,
+      "serviceTier": null,
+      "speculativeDecoding": null,
+      "spilloverDeploymentName": null,
+      "versionUpgradeOption": "OnceNewDefaultVersionAvailable"
+    },
+    "resourceGroup": "rg-angienet-3518",
+    "sku": {
+      "capacity": 50,
+      "family": null,
+      "name": "GlobalStandard",
+      "size": null,
+      "tier": null
+    },
+    "systemData": {
+      "createdAt": "2026-05-02T09:48:10.590099+00:00",
+      "createdBy": "angienet@live.de",
+      "createdByType": "User",
+      "lastModifiedAt": "2026-05-02T09:48:10.590099+00:00",
+      "lastModifiedBy": "angienet@live.de",
+      "lastModifiedByType": "User"
+    },
+    "tags": null,
+    "type": "Microsoft.CognitiveServices/accounts/deployments"
+  },
+  {
+    "etag": "\"960fd846-5249-425b-b352-78779fe4b81d\"",
+    "id": "/subscriptions/82188448-a9e4-4f5b-8bc2-91f7bc91e06c/resourceGroups/rg-angienet-3518/providers/Microsoft.CognitiveServices/accounts/smid-compass-resource/deployments/text-embedding-3-small",
+    "name": "text-embedding-3-small",
+    "properties": {
+      "callRateLimit": null,
+      "capabilities": {
+        "area": "EUR",
+        "embeddings": "true",
+        "embeddingsMaxInputs": "2048"
+      },
+      "capacitySettings": null,
+      "currentCapacity": 120,
+      "deploymentState": "Running",
+      "dynamicThrottlingEnabled": null,
+      "model": {
+        "callRateLimit": null,
+        "format": "OpenAI",
+        "name": "text-embedding-3-small",
+        "publisher": null,
+        "source": null,
+        "sourceAccount": null,
+        "version": "1"
+      },
+      "parentDeploymentName": null,
+      "provisioningState": "Succeeded",
+      "raiPolicyName": "Microsoft.DefaultV2",
+      "rateLimits": [
+        {
+          "count": 120.0,
+          "dynamicThrottlingEnabled": null,
+          "key": "request",
+          "matchPatterns": null,
+          "minCount": null,
+          "renewalPeriod": 10.0
+        },
+        {
+          "count": 120000.0,
+          "dynamicThrottlingEnabled": null,
+          "key": "token",
+          "matchPatterns": null,
+          "minCount": null,
+          "renewalPeriod": 60.0
+        }
+      ],
+      "routing": null,
+      "scaleSettings": null,
+      "serviceTier": null,
+      "speculativeDecoding": null,
+      "spilloverDeploymentName": null,
+      "versionUpgradeOption": "OnceNewDefaultVersionAvailable"
+    },
+    "resourceGroup": "rg-angienet-3518",
+    "sku": {
+      "capacity": 120,
+      "family": null,
+      "name": "GlobalStandard",
+      "size": null,
+      "tier": null
+    },
+    "systemData": {
+      "createdAt": "2026-05-02T09:48:24.851501+00:00",
+      "createdBy": "angienet@live.de",
+      "createdByType": "User",
+      "lastModifiedAt": "2026-05-02T09:48:24.851501+00:00",
+      "lastModifiedBy": "angienet@live.de",
+      "lastModifiedByType": "User"
+    },
+    "tags": null,
+    "type": "Microsoft.CognitiveServices/accounts/deployments"
+  }
+]
