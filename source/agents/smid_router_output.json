@@ -1,0 +1,25 @@
+{
+  "name": "smid_router_output",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "route": {
+        "type": "string",
+        "enum": [
+          "passport",
+          "workshop",
+          "out_of_scope"
+        ]
+      },
+      "reason": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "route",
+      "reason"
+    ],
+    "additionalProperties": false
+  },
+  "strict": true
+}

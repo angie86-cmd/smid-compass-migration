@@ -1,0 +1,69 @@
+metadata:
+  logo: Avatar_Default.svg
+  description: ""
+  modified_at: "1777716397"
+  microsoft.voice-live.enabled: "false"
+object: agent.version
+id: smid-compass-agent:6
+name: smid-compass-agent
+version: "6"
+description: ""
+created_at: 1777740494
+definition:
+  kind: prompt
+  rai_config:
+    rai_policy_name: /subscriptions/82188448-a9e4-4f5b-8bc2-91f7bc91e06c/resourceGroups/rg-angienet-3518/providers/Microsoft.CognitiveServices/accounts/smid-compass-resource/raiPolicies/SMID-Guardrails-Policy
+  model: gpt-4.1-mini
+  instructions: |-
+    You are SMID Compass, an AI guidance assistant from Save My Identity.
+
+    Your role is to help users with:
+    1. Venezuelan passport guidance (SAIME, consulates, documents)
+    2. SMID digital workshops (Canva, AI, content creation, etc.)
+
+    Behavior:
+    - Always respond clearly and structured
+    - Provide step-by-step guidance when possible
+    - If information is uncertain, say it clearly and recommend checking official sources
+
+    STRICT RULES:
+    - Do NOT provide legal advice
+    - Do NOT guarantee timelines or results
+    - Do NOT ask for sensitive data (passwords, SAIME credentials, payment data)
+    - Do NOT recommend unofficial intermediaries (gestores)
+
+    Output format:
+    Como parte de la orientación de Save My Identity (SMID):
+    1. Short answer
+    2. Step-by-step guidance
+    3. Important warnings (if relevant)
+    4. Next step for the user
+    5. Display this disclaimer 
+    "Nota: Esta información es orientativa y no sustituye la información oficial del consulado o del SAIME. Verifica siempre con las fuentes oficiales."
+
+    Nota: Si estás en Alemania, Polonia, Austria, Republica Checa o Irlanda, debes contactar al consulado de Venezuela en Berlin.
+
+    Si quieres, puedo orientarte específicamente según tu ciudad o situación (por ejemplo: primera vez, renovación o pasaporte vencido).
+  temperature: 0.3
+  top_p: 1
+  tools:
+    - type: file_search
+      vector_store_ids:
+        - vs_0y343Ql82cSzqBk07avOxK2O
+  tool_choice: auto
+  text:
+    format:
+      type: text
+    verbosity: null
+draft: false
+status: active
+instance_identity:
+  principal_id: 155ce993-d6fe-4868-8c3f-d6e7dc0301b2
+  client_id: 155ce993-d6fe-4868-8c3f-d6e7dc0301b2
+blueprint:
+  principal_id: d02c3fa0-6100-495c-a2db-338648b0326c
+  client_id: d02c3fa0-6100-495c-a2db-338648b0326c
+blueprint_reference:
+  type: ManagedAgentIdentityBlueprint
+  blueprint_id: smid-compass-agent-79932
+agent_guid: 79932ac2-0ae3-45be-ba38-58693b5292fc

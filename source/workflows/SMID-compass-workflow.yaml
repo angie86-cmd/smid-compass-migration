@@ -1,0 +1,83 @@
+kind: workflow
+trigger:
+  kind: OnConversationStart
+  id: trigger_wf
+  actions:
+    - kind: InvokeAzureAgent
+      id: node-1777738401900
+      agent:
+        name: SMID-RouterAgent
+      conversationId: =System.ConversationId
+      input:
+        messages: =System.LastMessage.Text
+      output:
+        autoSend: true
+        responseObject: Local.router_json
+    - kind: ConditionGroup
+      conditions:
+        - condition: =Local.router_json.route = "passport"
+          actions:
+            - kind: InvokeAzureAgent
+              id: node-1777744904959
+              agent:
+                name: SMID-PassGuide
+              conversationId: =System.ConversationId
+              input:
+                messages: =System.LastMessage.Text
+              output:
+                autoSend: true
+                messages: Local.passport_answer
+                responseObject: Local.passport_json
+          id: if-node-1777744701409-hrg8v7hy
+        - condition: =Local.router_json.route = "workshop"
+          actions:
+            - kind: InvokeAzureAgent
+              id: node-1777753695596
+              agent:
+                name: SMID-WorkshopGuide
+              conversationId: =System.ConversationId
+              input:
+                messages: =System.LastMessage.Text
+              output:
+                autoSend: true
+                messages: Local.workshop_answer
+                responseObject: Local.workshop_json
+          id: if-node-1777744701409-o6fe6lp3
+      id: node-1777744701409
+      elseActions:
+        - kind: InvokeAzureAgent
+          id: node-1777753679454
+          agent:
+            name: OutOfScopeAgent
+          conversationId: =System.ConversationId
+          input:
+            messages: =System.LastMessage.Text
+          output:
+            autoSend: true
+            messages: Local.OutOfScope
+            responseObject: Local.outOfScope_json
+        - kind: EndConversation
+          id: node-1777755417417
+    - kind: InvokeAzureAgent
+      id: agent3
+      agent:
+        name: SMID-SafetyAgent
+      conversationId: =System.ConversationId
+      description: Third agent in sequential workflow
+      input:
+        messages: =Coalesce(Local.passport_answer, Local.workshop_answer)
+      output:
+        messages: Local.final_answer
+        autoSend: true
+    - kind: EndConversation
+      id: node-1777739592716
+id: ""
+name: SMID-compass-workflow
+description: ""
+
+# Sticky Notes
+# STICKY_NOTE: {"id":"sticky_1761166535807_awv9le4bg","text":"SMID Router Agent\n\nClassifies user requests into:\n- PASSPORT → Venezuelan passport, SAIME, consulates, identity\n- WORKSHOP → SMID workshops, Canva, AI, registration, payment\n- OUT_OF_SCOPE → unrelated topics OR conversation closing\n\nOutput:\n- route (passport | workshop | out_of_scope)\n- reason (short explanation)\n\nSpecial behavior:\n- Detects conversation closing (e.g. \"gracias\", \"bye\") \n  and routes to out_of_scope (handled as friendly goodbye)\n\nThis enables structured and reliable routing in the workflow.","width":769,"height":144,"x":525.2105598739137,"y":67.45860749218818}
+# STICKY_NOTE: {"id":"sticky_1761166557820_yn7ggfd41","text":"Passport Guidance Agent\n\nProvides structured guidance for Venezuelan passport processes:\n- SAIME platform\n- Consulates (e.g. Berlin)\n- Required documents\n- Fees and steps\n- Common mistakes\n\nOutput structure:\n1. Short answer\n2. Step-by-step\n3. Important warnings\n4. Next step\n5. Source / disclaimer\n\nSafety:\n- No legal advice\n- No guarantees (time, approval)\n- No sensitive data requests\n- Always recommend official sources (SAIME / consulate)","width":543,"height":128,"x":-571.6607606753381,"y":328.7430620335027}
+# STICKY_NOTE: {"id":"sticky_1761166563177_yntzuqr31","text":"Workshop Advisor Agent\n\nExplains SMID workshops and supports user onboarding:\n- Canva, AI, content creation\n- Digital business tools\n- Registration and payment process\n\nOutput structure:\n1. Short answer\n2. Relevant workshops/content\n3. Costs & registration\n4. Next step (adaptive onboarding)\n5. Informational note\n\nSmart behavior:\n- Adapts to user stage (before payment / after payment)\n- Does NOT repeat full steps unnecessarily\n- Can guide step-by-step only when needed\n\nRules:\n- No promises of income or success\n- No invented details\n- Refer to official program page if needed","width":352,"height":147,"x":257.2635565767388,"y":563.2843620991584}
+# STICKY_NOTE: {"id":"sticky_1777741484891_yyz6fyeuo","text":"Safety & Disclaimer Agent\n\nFinal validation layer before output.\n\nResponsibilities:\n- Review and improve clarity\n- Ensure safe and compliant content\n- Add disclaimer when needed\n\nIf route = out_of_scope:\n- DO NOT modify content\n- Return previous response as-is\n\nIf route = passport or workshop:\n- Improve wording only (no new info)\n- Ensure:\n  • no legal advice\n  • no guarantees\n  • no sensitive data requests\n  • no unofficial intermediaries\n\nGoal:\nClear, safe, structured and user-friendly final answer.","width":812,"height":124,"x":541.3289038118187,"y":710.6911491777173}
+# STICKY_NOTE: {"id":"sticky_1777758722064_95l79dl97","text":"OutOfScope Agent (Fallback & Closing)\n\nHandles:\n1. Unrelated requests\n2. Conversation closing (goodbye, thanks)\n\nBehavior:\n\nOut of scope:\n- Politely redirect to passport or workshop topics\n\nClosing:\n- Respond warmly and briefly\n- Do NOT redirect\n- Do NOT mention scope limitations\n\nTone:\n- Friendly, human, concise\n- Bilingual (Spanish / German)","width":200,"height":75,"x":886.5811566390782,"y":478.6464508521857}
