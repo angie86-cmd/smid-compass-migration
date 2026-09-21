@@ -1,0 +1,47 @@
+project:
+  name: smid-compass
+  parent_resource: smid-compass-resource
+  location: swedencentral
+  source_environment: private-azure-tenant
+
+models:
+  - deployment_name: gpt-4.1-mini
+    model: gpt-4.1-mini
+    version: "2025-04-14"
+    deployment_type: GlobalStandard
+
+  - deployment_name: text-embedding-3-small
+    model: text-embedding-3-small
+    version: "1"
+    deployment_type: GlobalStandard
+
+agents:
+  - SMID-RouterAgent
+  - SMID-PassGuide
+  - SMID-WorkshopGuide
+  - OutOfScopeAgent
+  - SMID-SafetyAgent
+  - smid-compass-agent
+
+workflow:
+  name: SMID-compass-workflow
+
+guardrails:
+  - SMID-Guardrails-Policy
+
+external_services:
+  azure_ai_search: false
+  dedicated_storage_account: false
+  foundry_iq_knowledge_base: false
+  memory: false
+  mcp_tools: false
+  external_api_tools: false
+  fine_tuning: false
+
+migration_status:
+  source_inventory: in_progress
+  source_backup: in_progress
+  terraform_target: not_started
+  nonprofit_dev: not_started
+  validation: not_started
+  production: not_started

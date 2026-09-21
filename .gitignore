@@ -1,0 +1,45 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.example.tfvars
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Azure / secrets / credentials
+.env
+.env.*
+*.pem
+*.pfx
+*.key
+*.p12
+*.cer
+credentials.json
+secrets.*
+*.publishsettings
+azureauth.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# VS Code
+.vscode/settings.json
+
+# OS / local caches / temp files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+.cache/

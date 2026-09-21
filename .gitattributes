@@ -1,0 +1,10 @@
+# Normalize line endings for text files
+* text=auto eol=lf
+
+# Preserve exported source configuration exactly as-is — no line-ending
+# or content normalization, since these files must match the original
+# Microsoft Foundry export byte-for-byte.
+source/** -text -diff
+
+# Treat PDFs as binary
+*.pdf binary
