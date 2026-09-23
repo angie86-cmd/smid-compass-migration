@@ -39,8 +39,8 @@ external_services:
   fine_tuning: false
 
 migration_status:
-  source_inventory: in_progress
-  source_backup: in_progress
+  source_inventory: complete
+  source_backup: complete
   terraform_target: not_started
   nonprofit_dev: not_started
   validation: not_started
