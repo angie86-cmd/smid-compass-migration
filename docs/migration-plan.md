@@ -1,6 +1,9 @@
-# Migration Plan
+# Migration Plan (superseded)
 
-Phases for migrating SMID Compass from the private Azure tenant to the Save My Identity nonprofit Azure tenant.
+> **Superseded by [plans/nonprofit-migration-plan-v1.md](plans/nonprofit-migration-plan-v1.md).**
+> That plan separates migration (parity reconstruction) from modernization into distinct phases, per the approved [Target Migration Architecture v1](architecture/target-migration-architecture-v1.md). This file is kept for history only.
+
+Original phase outline for migrating SMID Compass from the private Azure tenant to the Save My Identity nonprofit Azure tenant.
 
 Phase 0 - Source preservation
 Phase 1 - Source analysis

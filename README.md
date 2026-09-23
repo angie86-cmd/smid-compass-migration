@@ -67,6 +67,18 @@ Source inventory
 
 Do not assume source resource IDs, endpoints, client IDs, principal IDs, agent GUIDs, blueprint IDs or API keys can be reused in the target tenant.
 
+## Current migration status
+
+Source snapshot: **COMPLETE** / frozen at `source-snapshot-v1`
+
+Current phase: Target Migration Architecture v1
+
+Strategy: migrate → validate parity → modernize
+
+Next phase: nonprofit tenant preflight
+
+See [docs/architecture/target-migration-architecture-v1.md](docs/architecture/target-migration-architecture-v1.md) and [docs/plans/nonprofit-migration-plan-v1.md](docs/plans/nonprofit-migration-plan-v1.md).
+
 ## Repository rules
 
 Files under source/ represent the original tenant and should not be edited to make them suitable for the target environment.
