@@ -1,0 +1,11 @@
+# Example variable values for the SMID Compass Terraform state bootstrap.
+# Copy this file to bootstrap.tfvars (git-ignored) before running terraform plan or apply.
+# tenant_id and subscription_id are identifiers, not credentials.
+
+tenant_id       = "48cb7850-a5c9-4632-9dbd-eccda8b8b9bb"
+subscription_id = "a5bc333b-cd24-4c66-95e0-18013949c94f"
+
+location             = "swedencentral"
+resource_group_name  = "rg-smid-tfstate"
+storage_account_name = "stsmidtfstatea5bc33"
+container_name       = "tfstate"

@@ -16,6 +16,20 @@ See [../docs/architecture/target-migration-architecture-v1.md](../docs/architect
 
 Azure CLI authentication using the currently authenticated Save My Identity nonprofit account (`az login`). No client secrets, certificates, or other credentials are stored in this configuration.
 
+## State backend
+
+State is stored remotely in Azure Blob Storage (`backend.tf`), not locally, using Microsoft Entra ID authentication through the Azure CLI (`use_cli` / `use_azuread_auth`). No storage keys or credentials are stored in the repository.
+
+| | |
+|---|---|
+| Backend resource group | `rg-smid-tfstate` |
+| Storage account | `stsmidtfstatea5bc33` |
+| Container | `tfstate` |
+| State key | `smid-compass-dev.tfstate` |
+| Authentication | Microsoft Entra ID + Azure CLI |
+
+[`terraform/bootstrap/`](bootstrap/) creates this backend infrastructure (resource group, storage account, container, and the RBAC role granting access to it). This `terraform/` configuration only *uses* that backend to store the SMID Compass workload's own state — the two configurations are intentionally separate, so the backend is never at risk of being modified or destroyed by the workload it stores state for.
+
 ## Expected Azure context
 
 | | |
