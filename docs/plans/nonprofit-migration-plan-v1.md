@@ -14,7 +14,7 @@ Do not reopen unless evidence is later found to be missing.
 
 ## Phase 1 — Target architecture
 
-Status: **CURRENT**
+Status: **COMPLETE**
 
 Tasks:
 
@@ -23,7 +23,9 @@ Tasks:
 - Separate migration from modernization.
 - Approve Target Migration Architecture v1.
 
-Exit criterion: architecture approved before Terraform implementation.
+Result: Target Migration Architecture v1 approved. Migration and modernization are formally separated. See [target-migration-architecture-v1.md](../architecture/target-migration-architecture-v1.md).
+
+Exit criterion: architecture approved before Terraform implementation. Met.
 
 ## Phase 2 — Nonprofit preflight
 
@@ -48,6 +50,8 @@ No deployment yet. Verify:
 - Current workflow/orchestration capability
 - Application Insights
 - Log Analytics
+
+Result: nonprofit tenant verified, Owner permissions confirmed at subscription scope, required resource providers registered, Sweden Central approved, `gpt-4.1-mini` and `text-embedding-3-small` versions verified with sufficient quota/capacity.
 
 Output: [docs/preflight/nonprofit-preflight.md](../preflight/nonprofit-preflight.md) — result: **NONPROFIT PREFLIGHT PASSED**. Sweden Central approved for SMID Compass DEV.
 

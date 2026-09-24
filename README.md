@@ -69,15 +69,19 @@ Do not assume source resource IDs, endpoints, client IDs, principal IDs, agent G
 
 ## Current migration status
 
-Source snapshot: **COMPLETE** / frozen at `source-snapshot-v1`
+Source snapshot: **COMPLETE** — frozen at `source-snapshot-v1`
 
-Current phase: Target Migration Architecture v1
+Target Migration Architecture v1: **COMPLETE / APPROVED**
+
+Nonprofit tenant preflight: **COMPLETE / PASSED**
+
+Current phase: **PHASE 3 — TERRAFORM FOUNDATION**
 
 Strategy: migrate → validate parity → modernize
 
-Next phase: nonprofit tenant preflight
+Next technical objective: create the Terraform foundation for nonprofit DEV.
 
-See [docs/architecture/target-migration-architecture-v1.md](docs/architecture/target-migration-architecture-v1.md) and [docs/plans/nonprofit-migration-plan-v1.md](docs/plans/nonprofit-migration-plan-v1.md).
+See [docs/architecture/target-migration-architecture-v1.md](docs/architecture/target-migration-architecture-v1.md), [docs/plans/nonprofit-migration-plan-v1.md](docs/plans/nonprofit-migration-plan-v1.md), and [docs/preflight/nonprofit-preflight.md](docs/preflight/nonprofit-preflight.md).
 
 ## Repository rules
 
