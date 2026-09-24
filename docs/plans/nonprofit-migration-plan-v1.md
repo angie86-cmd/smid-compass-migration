@@ -2,7 +2,7 @@
 
 Incremental phases for reconstructing SMID Compass in the Save My Identity nonprofit Azure tenant, following the architecture in [target-migration-architecture-v1.md](../architecture/target-migration-architecture-v1.md).
 
-Strategy: **migrate first, validate parity, modernize later.** Migration and modernization are kept as separate phases (see Phase 10).
+Strategy: **migrate → validate → small PROD pilot → modernize in DEV → validate → promote modernization to PROD.** Migration and modernization are kept as separate phases (see Phase 11), and production is rolled out incrementally rather than as a single deployment that waits for modernization to finish.
 
 ## Phase 0 — Source preservation
 
@@ -158,11 +158,26 @@ Exit criterion: functional parity accepted.
 
 ## Phase 9 — Freeze nonprofit parity baseline
 
-After validation, create a dedicated Git baseline/tag such as `nonprofit-parity-v1`. **Not created now.** It should represent a working nonprofit DEV reconstruction before modernization.
+After validation, create a dedicated Git baseline/tag: `nonprofit-parity-v1`. **Not created now.** It represents a working, source-parity nonprofit DEV reconstruction, before modernization and before any PROD deployment. It is what Phase 10 promotes to PROD, and what DEV branches from again in Phase 11 to begin modernization.
 
-## Phase 10 — Modernization v2
+## Phase 10 — Initial PROD parity pilot
 
-Only after the nonprofit parity baseline exists. Potential future work:
+Only after `nonprofit-parity-v1` exists (Phase 9).
+
+Promote the validated parity baseline — not a modernized version — to PROD, as a small, controlled pilot rather than a full production rollout:
+
+- Deploy the `nonprofit-parity-v1` baseline to PROD infrastructure, scoped down (e.g. limited users/traffic) as appropriate for a pilot.
+- Collect monitoring and operational feedback (observability, error rates, real-world usage patterns) from an actual PROD environment.
+- Do not introduce Modernization v2 changes during this pilot. PROD at this point runs the same source-parity behavior validated in DEV, nothing more.
+- DEV remains the only environment where modernization work happens (Phase 11); this PROD pilot is not touched by that work directly.
+
+Exit criterion: parity baseline running in a small, controlled PROD pilot, with monitoring in place and no major issues observed.
+
+## Phase 11 — Modernization v2 (DEV only)
+
+Modernization starts only after the nonprofit parity baseline exists (Phase 9) — it does not need to wait for the PROD pilot to conclude, but it must never modify the already-running PROD pilot directly. All Modernization v2 work happens in DEV.
+
+Potential future work:
 
 - Microsoft Agent Framework
 - Workflow modernization
@@ -176,6 +191,18 @@ Only after the nonprofit parity baseline exists. Potential future work:
 
 Not implemented now.
 
+Sequence once this phase begins:
+
+1. Implement modernization changes in DEV, branching from `nonprofit-parity-v1`.
+2. Validate the modernized DEV version (equivalent rigor to Phase 8, against modernized behavior rather than strict source parity).
+3. Freeze a new modernized baseline (a dedicated Git tag, e.g. `nonprofit-modernized-v2`).
+4. Promote that validated modernized baseline to PROD in a second, separate controlled rollout — distinct from, and after, the initial parity pilot in Phase 10.
+
 ## Production
 
-PROD is not part of the current deployment phase. Production happens only after: DEV migration → parity validation → `nonprofit-parity-v1` → approved next step. Do not create PROD infrastructure yet.
+Production is rolled out incrementally, in two controlled stages, not as a single deployment gated on Modernization v2:
+
+1. **Initial parity pilot (Phase 10):** once `nonprofit-parity-v1` exists, that source-parity baseline is promoted to PROD as a small, controlled pilot with monitoring, before any modernization work begins.
+2. **Modernization promotion (end of Phase 11):** once Modernization v2 is implemented and validated in DEV and frozen as its own baseline, that modernized version is promoted to PROD in a second, separate controlled rollout.
+
+Do not create PROD infrastructure yet — Phase 4 (DEV infrastructure deployment) explicitly excludes PROD, and PROD work does not begin until Phase 10.
