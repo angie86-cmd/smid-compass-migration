@@ -1,0 +1,9 @@
+# Example variable values for the SMID Compass nonprofit DEV environment.
+# Copy this file to dev.tfvars (git-ignored) before running Terraform.
+# tenant_id and subscription_id are identifiers, not credentials.
+
+tenant_id       = "48cb7850-a5c9-4632-9dbd-eccda8b8b9bb"
+subscription_id = "a5bc333b-cd24-4c66-95e0-18013949c94f"
+location        = "swedencentral"
+environment     = "dev"
+project_name    = "smid-compass"

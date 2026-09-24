@@ -1,10 +1,11 @@
 # Terraform
 .terraform/
-.terraform.lock.hcl
 *.tfstate
 *.tfstate.*
 *.tfvars
 !*.example.tfvars
+# .terraform.lock.hcl is intentionally NOT ignored: it is committed for
+# reproducible provider version resolution.
 crash.log
 crash.*.log
 override.tf
