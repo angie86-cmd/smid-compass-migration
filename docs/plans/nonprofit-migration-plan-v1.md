@@ -27,6 +27,8 @@ Exit criterion: architecture approved before Terraform implementation.
 
 ## Phase 2 — Nonprofit preflight
 
+Status: **COMPLETE**
+
 No deployment yet. Verify:
 
 - Correct nonprofit tenant
@@ -47,11 +49,13 @@ No deployment yet. Verify:
 - Application Insights
 - Log Analytics
 
-Output: `docs/preflight/nonprofit-preflight.md` — not created yet; it will be produced during Phase 2.
+Output: [docs/preflight/nonprofit-preflight.md](../preflight/nonprofit-preflight.md) — result: **NONPROFIT PREFLIGHT PASSED**. Sweden Central approved for SMID Compass DEV.
 
-Exit criterion: target region and required services confirmed.
+Exit criterion: target region and required services confirmed. Met.
 
 ## Phase 3 — Terraform foundation
+
+Status: **CURRENT**
 
 Only after Phase 2 passes.
 
