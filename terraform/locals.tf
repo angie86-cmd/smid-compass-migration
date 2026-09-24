@@ -11,4 +11,7 @@ locals {
     managed_by   = "terraform"
     organization = "save-my-identity"
   }
+
+  log_analytics_name = "log-${local.project}-${local.environment}"
+  app_insights_name  = "appi-${local.project}-${local.environment}"
 }

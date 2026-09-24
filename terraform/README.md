@@ -4,7 +4,14 @@ Purpose: infrastructure as code for the SMID Compass nonprofit DEV environment (
 
 ## Current phase
 
-**Terraform foundation only.** This configuration currently defines only Terraform/provider requirements, variables, and locals. No Azure resources are declared yet (see `main.tf`). Resources will be introduced incrementally after this foundation is reviewed and validated.
+**Terraform foundation only.** The DEV foundation currently contains:
+
+- Resource Group
+- Log Analytics Workspace
+- Application Insights (connected to the Log Analytics Workspace)
+- Azure Blob remote Terraform state
+
+Microsoft Foundry, model deployments, identities/RBAC, and budgets/alerts have not been added yet. Resources continue to be introduced incrementally, reviewed and validated at each step.
 
 ## Deployment strategy
 
@@ -29,6 +36,14 @@ State is stored remotely in Azure Blob Storage (`backend.tf`), not locally, usin
 | Authentication | Microsoft Entra ID + Azure CLI |
 
 [`terraform/bootstrap/`](bootstrap/) creates this backend infrastructure (resource group, storage account, container, and the RBAC role granting access to it). This `terraform/` configuration only *uses* that backend to store the SMID Compass workload's own state — the two configurations are intentionally separate, so the backend is never at risk of being modified or destroyed by the workload it stores state for.
+
+## Observability
+
+- **Log Analytics Workspace** (`log-smid-compass-dev`) is the central workspace for collecting and querying operational logs and telemetry across the DEV environment.
+- **Application Insights** (`appi-smid-compass-dev`) provides application-level observability: requests, failures, dependencies, traces, and performance data.
+- Application Insights is linked to the Log Analytics Workspace (workspace-based mode), so observability data can be analyzed centrally.
+- These are freshly provisioned nonprofit-tenant resources, distinct from the source tenant's own Application Insights/Log Analytics instances — consistent with the Target Migration Architecture v1 principle of never cloning historical IDs or configuration.
+- The observability layer is deployed before Foundry resources so monitoring and troubleshooting are available from the start of the workload build-out.
 
 ## Expected Azure context
 
