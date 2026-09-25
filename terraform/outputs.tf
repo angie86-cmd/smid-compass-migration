@@ -62,6 +62,11 @@ output "foundry_project_principal_id" {
   value       = azurerm_cognitive_account_project.smid_compass_dev.identity[0].principal_id
 }
 
+output "guardrails_policy_id" {
+  description = "ARM resource ID of the SMID-Guardrails-Policy RAI policy. Used as rai_config.rai_policy_name when restoring the five agents that reference this policy."
+  value       = azurerm_cognitive_account_rai_policy.smid_guardrails.id
+}
+
 # --- Model deployment outputs ------------------------------------------
 
 output "gpt_4_1_mini_deployment_name" {

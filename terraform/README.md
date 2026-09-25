@@ -16,6 +16,7 @@ Prepared in this change, **not yet applied** (pending manual review, `terraform 
 
 - `gpt-4.1-mini` model deployment (source-parity)
 - `text-embedding-3-small` model deployment (source-parity)
+- `SMID-Guardrails-Policy` RAI (content-safety) policy (source-parity) — the last Terraform-managed control-plane resource the application-layer agent restoration is waiting on; see [Guardrails policy](#guardrails-policy) below
 - Foundry User RBAC for the current developer identity, scoped to the Foundry resource
 - Foundry User RBAC for the Foundry project's managed identity, scoped to the Foundry resource
 - DEV Cost Management budget and threshold notifications for `rg-smid-compass-dev`
@@ -59,6 +60,26 @@ State is stored remotely in Azure Blob Storage (`backend.tf`), not locally, usin
 ## Model deployments
 
 `gpt-4.1-mini` and `text-embedding-3-small` are deployed directly on the Foundry resource (`azurerm_cognitive_deployment`), preserving source parity exactly: same model versions, `GlobalStandard` SKU, capacity, RAI policy (`Microsoft.DefaultV2`), and version upgrade option as `source/azure/deployments/*.raw.json`. Capacity is intentionally not optimized during this migration step.
+
+## Guardrails policy
+
+`SMID-Guardrails-Policy` (`azurerm_cognitive_account_rai_policy`) is source-parity infrastructure, required *before* agent restoration: five of the six target agents (`source/agents/*.yaml`) reference this policy by ARM ID via `rai_config.rai_policy_name`, and cannot be created at the Foundry application layer until it exists. This is why it's added to Terraform now, ahead of that later, non-Terraform step (see [Connections](#connections) — agents themselves are still never managed by this configuration).
+
+Source → Terraform mapping (`source/guardrails/SMID-Guardrails-Policy.json`, a normalized summary, not a raw ARM export):
+
+| Source | Terraform |
+|---|---|
+| `content_safety.{hate,self_harm,sexual,violence}.level = "highest_blocking"` | `content_filter.severity_threshold = "High"`, one filter per category |
+| `intervention_points: [user_input, output]` | Two `content_filter` blocks per category: `source = "Prompt"` (user_input) and `source = "Completion"` (output) |
+| `action: "block"` | `filter_enabled = true`, `block_enabled = true` |
+| `jailbreak.intervention_point: [user_input]`, `action: "block"` | One `content_filter` block: `name = "Jailbreak"`, `source = "Prompt"` only (no Completion-side counterpart, matching source) |
+
+Two points with no direct source equivalent, both called out in the Terraform comments rather than silently decided:
+
+- `base_policy_name = "Microsoft.Default"` — required by the resource, but source (a normalized summary) has no such field. This is the conventional base every custom RAI policy builds on; the `content_filter` overrides above are what actually encodes source behavior.
+- The Jailbreak filter's `severity_threshold = "Low"` is **unverified** — jailbreak/prompt-injection detection in Azure OpenAI is normally binary rather than severity-graded, so there's no confirmed direct mapping from source's "highest_blocking" wording for this specific category. Verify against a live policy before applying.
+
+Agent↔policy association (which of the six agents actually reference this policy, including the source asymmetry where `OutOfScopeAgent` does not) is deliberately **not** decided here — it's part of the later Foundry application-layer agent restoration, not this infrastructure resource.
 
 ## RBAC
 

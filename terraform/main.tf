@@ -103,6 +103,119 @@ resource "azurerm_cognitive_account_project" "smid_compass_dev" {
   tags = local.common_tags
 }
 
+# SMID-Guardrails-Policy: source-parity content-safety (RAI) policy.
+# Preserves source/guardrails/SMID-Guardrails-Policy.json exactly — see
+# terraform/README.md for the full source -> Terraform field mapping,
+# including the one field with no direct source equivalent (base_policy_name)
+# and the one unverified value (the Jailbreak filter's severity_threshold).
+# This is a required prerequisite for agent restoration: five of the six
+# target agents reference this policy's ARM ID via their rai_config
+# (see target/migration/agents/*.manifest.json) and cannot be created
+# until it exists.
+#
+# Deliberately NOT associated with any agent here. Agent<->policy
+# association happens later, at the Foundry application layer (agent
+# manifests), not in Terraform — because OutOfScopeAgent's asymmetry (the
+# one agent source did NOT associate with this policy) must be preserved
+# by that later step, not decided by this infrastructure resource.
+resource "azurerm_cognitive_account_rai_policy" "smid_guardrails" {
+  name                 = "SMID-Guardrails-Policy"
+  cognitive_account_id = azurerm_cognitive_account.smid_compass_dev.id
+
+  # No source value maps to base_policy_name (source/guardrails/*.json is a
+  # normalized summary, not a raw ARM export, and has no such field).
+  # "Microsoft.Default" is used as the conventional base every custom RAI
+  # policy builds on top of; the content_filter overrides below are what
+  # actually encodes source behavior.
+  base_policy_name = "Microsoft.Default"
+
+  # Hate / SelfHarm / Sexual / Violence: source content_safety sets
+  # level = "highest_blocking" with intervention_points = [user_input, output]
+  # identically for all four categories. Terraform requires one
+  # content_filter block per (category, source) pair; severity_threshold
+  # = "High" is the deterministic mapping of "highest_blocking", and
+  # source = "Prompt"/"Completion" maps to intervention_points
+  # "user_input"/"output" respectively.
+  content_filter {
+    name               = "Hate"
+    source             = "Prompt"
+    filter_enabled     = true
+    block_enabled      = true
+    severity_threshold = "High"
+  }
+  content_filter {
+    name               = "Hate"
+    source             = "Completion"
+    filter_enabled     = true
+    block_enabled      = true
+    severity_threshold = "High"
+  }
+  content_filter {
+    name               = "SelfHarm"
+    source             = "Prompt"
+    filter_enabled     = true
+    block_enabled      = true
+    severity_threshold = "High"
+  }
+  content_filter {
+    name               = "SelfHarm"
+    source             = "Completion"
+    filter_enabled     = true
+    block_enabled      = true
+    severity_threshold = "High"
+  }
+  content_filter {
+    name               = "Sexual"
+    source             = "Prompt"
+    filter_enabled     = true
+    block_enabled      = true
+    severity_threshold = "High"
+  }
+  content_filter {
+    name               = "Sexual"
+    source             = "Completion"
+    filter_enabled     = true
+    block_enabled      = true
+    severity_threshold = "High"
+  }
+  content_filter {
+    name               = "Violence"
+    source             = "Prompt"
+    filter_enabled     = true
+    block_enabled      = true
+    severity_threshold = "High"
+  }
+  content_filter {
+    name               = "Violence"
+    source             = "Completion"
+    filter_enabled     = true
+    block_enabled      = true
+    severity_threshold = "High"
+  }
+
+  # Jailbreak: source jailbreak block covers only intervention_point =
+  # user_input (no "output" entry, unlike the four categories above), so
+  # only a single Prompt-side filter is defined here — no Completion-side
+  # counterpart, matching source exactly.
+  #
+  # UNVERIFIED (flagged, not silently guessed): jailbreak/prompt-injection
+  # detection in Azure OpenAI content filters is normally binary rather
+  # than severity-graded, so there's no direct equivalent of source's
+  # "highest_blocking" wording for this category. severity_threshold =
+  # "Low" is used here to catch all detections (the most inclusive
+  # threshold), but this specific value was not confirmed against a live
+  # policy or authoritative schema this session. Verify before apply.
+  content_filter {
+    name               = "Jailbreak"
+    source             = "Prompt"
+    filter_enabled     = true
+    block_enabled      = true
+    severity_threshold = "Low"
+  }
+
+  tags = local.common_tags
+}
+
 # Current authenticated principal (subscription Owner, but that is a
 # management-plane role; Foundry data-plane/development access such as
 # agent import still requires this explicit assignment). Data source is
