@@ -1,7 +1,12 @@
 # Bootstraps the Azure backend used to store Terraform remote state for
-# the SMID Compass nonprofit environment. This bootstrap configuration
-# itself uses local state; only the storage account/container it creates
-# is used as a remote backend for the main workload configuration.
+# the SMID Compass nonprofit environment, solving the usual chicken-and-egg
+# "backend bootstrap" problem: the storage account/container a remote
+# backend needs cannot itself be created using that same remote backend,
+# so this separate root module creates them using local state, one time,
+# before the main workload configuration (terraform/) can point its own
+# backend at them. This bootstrap configuration's own state stays local
+# permanently — only the storage account/container it creates is used as
+# a remote backend, and only by the main workload, never by this module.
 #
 # Provisioning here (resource group, storage account, container) goes
 # through the Azure Resource Manager (ARM) control plane only. The blob

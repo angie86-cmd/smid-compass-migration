@@ -7,3 +7,17 @@ subscription_id = "a5bc333b-cd24-4c66-95e0-18013949c94f"
 location        = "swedencentral"
 environment     = "dev"
 project_name    = "smid-compass"
+
+# monthly_budget_amount: REQUIRED, no default. Set this to the actual
+# approved monthly DEV budget (in the Azure billing currency) before
+# running `terraform plan`. The value below is a placeholder only — it is
+# not an approved budget and must be reviewed and replaced manually.
+monthly_budget_amount = 0 # TODO: replace with the real approved monthly budget amount
+
+# budget_start_date: REQUIRED, no default. Must be the first day of the
+# current budget month, in the format YYYY-MM-DDTHH:mm:ssZ
+# (e.g. "2026-10-01T00:00:00Z" for October 2026). Update the month/year
+# below to match the actual month the budget should start from.
+budget_start_date = "REPLACE_WITH_FIRST_DAY_OF_BUDGET_MONTH_T00:00:00Z"
+
+budget_alert_email = "cloud_smid@savemyidentityorg.onmicrosoft.com"

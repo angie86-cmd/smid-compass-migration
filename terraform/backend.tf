@@ -25,6 +25,9 @@ terraform {
     resource_group_name  = "rg-smid-tfstate"
     storage_account_name = "stsmidtfstatea5bc33"
     container_name       = "tfstate"
-    key                  = "smid-compass-dev.tfstate"
+    # key is environment-specific: each environment (dev, prod, ...) gets
+    # its own blob in the same shared container, so a future PROD backend
+    # block uses a different key here rather than a different container.
+    key = "smid-compass-dev.tfstate"
   }
 }

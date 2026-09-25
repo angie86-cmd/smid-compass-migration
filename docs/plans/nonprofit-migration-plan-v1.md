@@ -80,6 +80,8 @@ Use AzureRM where supported. Use AzAPI only when required by missing AzureRM cov
 
 Commit `.terraform.lock.hcl`. Do not commit `*.tfstate`, secrets, production credentials, or sensitive tfvars.
 
+Progress: resource group, remote state, observability (Log Analytics, Application Insights), and the Foundry resource/project are applied. Model deployments, minimum Foundry RBAC, and the DEV cost budget have been prepared in Terraform code. Terraform foundation completion prepared; pending manual review, plan, and apply — not yet marked complete.
+
 Exit criterion: `terraform plan` reviewed before apply.
 
 ## Phase 4 — DEV infrastructure deployment
