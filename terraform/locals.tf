@@ -14,4 +14,7 @@ locals {
 
   log_analytics_name = "log-${local.project}-${local.environment}"
   app_insights_name  = "appi-${local.project}-${local.environment}"
+
+  foundry_resource_name = "smid-compass-dev-a5bc33"
+  foundry_project_name  = "smid-compass"
 }

@@ -10,8 +10,11 @@ Purpose: infrastructure as code for the SMID Compass nonprofit DEV environment (
 - Log Analytics Workspace
 - Application Insights (connected to the Log Analytics Workspace)
 - Azure Blob remote Terraform state
+- Microsoft Foundry resource and Microsoft Foundry project (code prepared, **not yet applied**)
 
-Microsoft Foundry, model deployments, identities/RBAC, and budgets/alerts have not been added yet. Resources continue to be introduced incrementally, reviewed and validated at each step.
+The Foundry resource (`azurerm_cognitive_account`, kind `AIServices`) is the parent AI Services resource; project management is enabled on it so the Foundry project (`azurerm_cognitive_account_project`) can exist under it. Both have system-assigned managed identities prepared for later RBAC configuration. Model deployments are intentionally deferred to the next step, and agents, knowledge/vector stores, workflows, and connections are not part of this change.
+
+Model deployments, identities/RBAC beyond the managed identities above, and budgets/alerts have not been added yet. Resources continue to be introduced incrementally, reviewed and validated at each step.
 
 ## Deployment strategy
 
