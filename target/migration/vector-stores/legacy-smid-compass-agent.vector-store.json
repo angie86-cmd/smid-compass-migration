@@ -1,0 +1,31 @@
+{
+  "_meta": {
+    "purpose": "Target vector store for the legacy smid-compass-agent's file_search tool. Preserved for parity/history; not redesigned or trimmed.",
+    "source_vector_store_id": "vs_0y343Ql82cSzqBk07avOxK2O (historical, never reused)",
+    "endpoint": "POST {FOUNDRY_PROJECT_ENDPOINT}/openai/v1/vector_stores",
+    "target_vector_store_id_status": "PENDING — populated only after live creation. Placeholder must not be treated as real.",
+    "historical_finding_preserved": "LOPNA 2015.pdf had source_vector_status = 'failed' (source_usage_bytes: 0) in the source legacy vector store. The physical file is included below to attempt reconstruction, but this historical failure is documented, not silently corrected or omitted. If the target ingestion succeeds where the source failed, that is a platform-behavior difference to note in the mapping doc, not a 'fix' performed intentionally."
+  },
+  "request_body": {
+    "name": "smid-compass-agent-legacy",
+    "file_ids": [
+      "{{TARGET_FILE_ID:LOPNA 2015.pdf}}",
+      "{{TARGET_FILE_ID:ley-de-registro-de-antecedentes-penales.pdf}}",
+      "{{TARGET_FILE_ID:presentacion general.pdf}}",
+      "{{TARGET_FILE_ID:Autorizacion envio pasaporte a domicilio (1).pdf.pdf}}",
+      "{{TARGET_FILE_ID:ley-nacionalidad-ciudadania.pdf}}",
+      "{{TARGET_FILE_ID:Embajada de Venezuela en Berlín – Novedades y guía actualizada.pdf}}",
+      "{{TARGET_FILE_ID:GUIA RAPIDA SOBRE EL PROGRAMA DE TALLERES 2026.pdf}}",
+      "{{TARGET_FILE_ID:Guia paso a paso para tramitar el pasaporte venezolano desde venezuela y desde el exterior.pdf}}"
+    ],
+    "chunking_strategy": {
+      "type": "static",
+      "static": {
+        "max_chunk_size_tokens": 800,
+        "chunk_overlap_tokens": 400
+      }
+    }
+  },
+  "expected_membership_count": 8,
+  "target_vector_store_id": "PENDING"
+}

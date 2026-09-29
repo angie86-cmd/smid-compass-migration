@@ -1,0 +1,27 @@
+{
+  "_meta": {
+    "source": "source/workflows/SMID-compass-workflow.yaml",
+    "compatibility_status": "Creatable today via WorkflowAgentDefinition (kind: workflow), confirmed against the current Foundry Agents API TypeSpec (Azure/azure-rest-api-specs, specification/ai-foundry/data-plane/Foundry/src/agents/models.tsp). This type is marked #deprecated in the spec and gated behind an opt-in preview feature (workflow_agents_v1_preview), consistent with the documented 2026-12-01 retirement of declarative workflows. It is NOT yet retired, so no compatibility substitution or Agent Framework migration is used for this parity restoration.",
+    "endpoint": "POST {FOUNDRY_PROJECT_ENDPOINT}/agents?api-version=v1",
+    "required_request_header": "Foundry-Features: Agents.WorkflowAgents=V1Preview  (exact header key/value not independently verified against a live call this session; the opt-in requirement itself is confirmed in the TypeSpec source. Verify the literal header value before the live call and report if it differs.)",
+    "schema_translation": [
+      "definition.workflow is a string containing the full CSDL/YAML workflow definition — see SMID-compass-workflow.yaml in this directory for the exact reviewable content to place there.",
+      "Sticky-note comments (# STICKY_NOTE: {...}) present at the end of the source YAML were omitted from the target copy. These are portal-designer visual annotations only, with no execution semantics (no action/trigger/condition reads them) — omitting them does not change workflow behavior. Flagged here rather than silently dropped without mention.",
+      "id: \"\" and name/description preserved as-is from source; the target agent name for this workflow agent is set to 'SMID-compass-workflow' below, matching source name exactly."
+    ],
+    "behavioral_facts_preserved_not_fixed": [
+      "OutOfScope does NOT pass through SMID-SafetyAgent — it ends the conversation directly (elseActions -> InvokeAzureAgent OutOfScopeAgent -> EndConversation), bypassing the Safety node entirely. Preserved exactly.",
+      "SMID-SafetyAgent's instructions describe expecting '<route> | <answer>' as input, but this workflow only ever sends `=Coalesce(Local.passport_answer, Local.workshop_answer)` — the answer text alone, with no route prefix. This is the documented source mismatch. NOT corrected in this parity restoration; see target/migration/mapping/source-to-target-mapping.md for the Modernization v2 deferral note."
+    ],
+    "target_workflow_agent_id_version_status": "PENDING — only exists after live creation."
+  },
+  "request_body": {
+    "name": "SMID-compass-workflow",
+    "definition": {
+      "kind": "workflow",
+      "workflow": "<contents of SMID-compass-workflow.yaml in this directory, as a single string, at execution time>"
+    }
+  },
+  "target_agent_id": "PENDING",
+  "target_version": "PENDING"
+}

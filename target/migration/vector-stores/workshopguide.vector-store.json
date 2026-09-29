@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "purpose": "Target vector store for SMID-WorkshopGuide's file_search tool.",
+    "source_vector_store_id": "vs_i72YNBIWpR8vyXns4tb2e4vC (historical, never reused)",
+    "endpoint": "POST {FOUNDRY_PROJECT_ENDPOINT}/openai/v1/vector_stores",
+    "target_vector_store_id_status": "PENDING — populated only after live creation. Placeholder must not be treated as real."
+  },
+  "request_body": {
+    "name": "smid-workshopguide",
+    "file_ids": [
+      "{{TARGET_FILE_ID:WorkshopsInfoFromIG.pdf}}",
+      "{{TARGET_FILE_ID:GUIA RAPIDA SOBRE EL PROGRAMA DE TALLERES 2026.pdf}}"
+    ],
+    "chunking_strategy": {
+      "type": "static",
+      "static": {
+        "max_chunk_size_tokens": 800,
+        "chunk_overlap_tokens": 400
+      }
+    }
+  },
+  "expected_membership_count": 2,
+  "target_vector_store_id": "PENDING"
+}

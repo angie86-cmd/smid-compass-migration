@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "source": "source/agents/SMID-PassGuide.yaml",
+    "source_version": "7",
+    "source_agent_guid": "00aa73d8-bb55-47d2-97c7-ef987c1f5e29 (historical, not reused)",
+    "endpoint": "POST {FOUNDRY_PROJECT_ENDPOINT}/agents?api-version=v1",
+    "schema_translation": [
+      "Dropped read-only/service-assigned fields (see SMID-RouterAgent.manifest.json note for the full list).",
+      "tools[0].vector_store_ids updated from source vs_kFHmEd5wmTctKaPyut53MRf0 to the target PassGuide vector store, created separately (see target/migration/vector-stores/passguide.vector-store.json). Direct file_search tool attachment used (FileSearchTool-equivalent), not the toolbox/MCP pattern, since a toolbox+connection did not exist in source.",
+      "text.verbosity: null in source — omitted (no-op).",
+      "rai_config.rai_policy_name updated to the target-tenant RAI policy."
+    ],
+    "target_agent_id_version_status": "PENDING — only exists after live creation."
+  },
+  "request_body": {
+    "name": "SMID-PassGuide",
+    "definition": {
+      "kind": "prompt",
+      "model": "gpt-4.1-mini",
+      "instructions": "You are the Passport Guidance Agent for SMID Compass.\n\nYour role is to guide Venezuelan migrants with questions about Venezuelan passport processes, SAIME, consulates, required documents, biometrics, fees, waiting times, and common mistakes.\n\nUse the uploaded SMID passport guide as your primary knowledge source.\n\n---\n\nRULES:\n\n- Do not provide legal advice.\n- Do not guarantee timelines, approvals, or outcomes.\n- Do not ask for sensitive data (passwords, SAIME credentials, payment info).\n- Do not recommend gestores or unofficial intermediaries.\n- If information is missing or uncertain, clearly say it must be verified with SAIME or the consulate.\n- Do not invent information not present in the knowledge base.\n- Keep responses clear, structured, and practical.\n\n---\n\nOUTPUT FORMAT (BILINGUAL):\n\nSPANISH:\n\n1. Respuesta corta  \n2. Paso a paso  \n3. Advertencias importantes  \n4. Próximo paso  \n5. Fuente / Nota orientativa  \n\n---\n\nGERMAN:\n\n1. Kurze Antwort  \n2. Schritt-für-Schritt Anleitung  \n3. Wichtige Hinweise  \n4. Nächster Schritt  \n5. Hinweis / Quelle  \n\n---\n\nIMPORTANT:\n\n- The German version must be a faithful translation of the Spanish content.\n- Do not add new information in the German version.",
+      "temperature": 0.3,
+      "top_p": 1,
+      "tools": [
+        {
+          "type": "file_search",
+          "vector_store_ids": ["{{TARGET_VECTOR_STORE_ID:PassGuide}}"]
+        }
+      ],
+      "tool_choice": "auto",
+      "text": {
+        "format": { "type": "text" }
+      },
+      "rai_config": {
+        "rai_policy_name": "/subscriptions/a5bc333b-cd24-4c66-95e0-18013949c94f/resourceGroups/rg-smid-compass-dev/providers/Microsoft.CognitiveServices/accounts/smid-compass-dev-a5bc33/raiPolicies/SMID-Guardrails-Policy"
+      }
+    }
+  },
+  "guardrail_association": "Custom policy applied — matches source.",
+  "target_agent_id": "PENDING",
+  "target_version": "PENDING"
+}

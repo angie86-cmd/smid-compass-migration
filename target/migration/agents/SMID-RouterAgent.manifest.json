@@ -1,0 +1,51 @@
+{
+  "_meta": {
+    "source": "source/agents/SMID-RouterAgent.yaml",
+    "source_version": "9",
+    "source_agent_guid": "f7ee651a-3bb2-4d75-ba73-c0ff53e9ed37 (historical, not reused)",
+    "endpoint": "POST {FOUNDRY_PROJECT_ENDPOINT}/agents?api-version=v1",
+    "schema_translation": [
+      "Dropped (read-only/service-assigned per current AgentVersionObject schema): metadata, object, id, version, description(empty), created_at, draft, status, instance_identity, blueprint, blueprint_reference, agent_guid.",
+      "text.verbosity: null in source — omitted here since null is a no-op in the current schema; not a semantic change.",
+      "rai_config.rai_policy_name updated to point at the target-tenant RAI policy (created separately; see target/migration/rai-policy/).",
+      "No tool_resources needed: tools is empty, matching source exactly."
+    ],
+    "target_agent_id_version_status": "PENDING — only exists after live creation."
+  },
+  "request_body": {
+    "name": "SMID-RouterAgent",
+    "definition": {
+      "kind": "prompt",
+      "model": "gpt-4.1-mini",
+      "instructions": "You are the Router Agent for SMID Compass.\n\nYour role is to classify the user's request into one of the following routes:\n\n- \"passport\" → for Venezuelan passport, SAIME, consulates, identity, documents\n- \"workshop\" → for SMID workshops, Canva, AI, content creation, registration\n- \"out_of_scope\" → anything unrelated to passport or workshops\n\nYou must always return ONLY a JSON object with:\n{\n  \"route\": \"...\",\n  \"reason\": \"...\"\n}\n\n---\n\nROUTING RULES:\n\n1. Passport route:\nIf the user asks about:\n- Venezuelan passport\n- SAIME\n- consulates\n- appointments\n- documents\n- fees\n- biometrics\n- password recovery (SAIME)\n\nReturn:\n{\n  \"route\": \"passport\",\n  \"reason\": \"User asks about passport or identity-related services.\"\n}\n\n---\n\n2. Workshop route:\nIf the user asks about:\n- SMID workshops\n- Canva\n- AI tools\n- content creation\n- digital business\n- registration or payment\n- what to do after payment\n\nReturn:\n{\n  \"route\": \"workshop\",\n  \"reason\": \"User asks about SMID workshops or related topics.\"\n}\n\n---\n\n3. Out of scope:\nIf the request is unrelated (e.g. cooking, sports, random topics):\n\nReturn:\n{\n  \"route\": \"out_of_scope\",\n  \"reason\": \"Request is unrelated to passport or workshop topics.\"\n}\n\n---\n\n4. Conversation closing (VERY IMPORTANT):\nIf the user says:\n- \"gracias\"\n- \"gracias y hasta luego\"\n- \"hasta luego\"\n- \"bye\"\n- \"nos vemos\"\n- \"thank you\"\n- \"thanks\"\n\nReturn:\n{\n  \"route\": \"out_of_scope\",\n  \"reason\": \"User is closing the conversation politely.\"\n}\n\n---\n\nRULES:\n- NEVER generate explanations outside JSON\n- NEVER mix routes\n- ALWAYS return valid JSON",
+      "temperature": 0.3,
+      "top_p": 1,
+      "tools": [],
+      "text": {
+        "format": {
+          "type": "json_schema",
+          "name": "smid_router_output",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "route": {
+                "type": "string",
+                "enum": ["passport", "workshop", "out_of_scope"]
+              },
+              "reason": { "type": "string" }
+            },
+            "required": ["route", "reason"],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      },
+      "rai_config": {
+        "rai_policy_name": "/subscriptions/a5bc333b-cd24-4c66-95e0-18013949c94f/resourceGroups/rg-smid-compass-dev/providers/Microsoft.CognitiveServices/accounts/smid-compass-dev-a5bc33/raiPolicies/SMID-Guardrails-Policy"
+      }
+    }
+  },
+  "guardrail_association": "Custom policy applied — matches source (Router is one of the five agents with the custom policy).",
+  "target_agent_id": "PENDING",
+  "target_version": "PENDING"
+}

@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "purpose": "Target vector store for SMID-PassGuide's file_search tool.",
+    "source_vector_store_id": "vs_kFHmEd5wmTctKaPyut53MRf0 (historical, never reused)",
+    "endpoint": "POST {FOUNDRY_PROJECT_ENDPOINT}/openai/v1/vector_stores",
+    "target_vector_store_id_status": "PENDING — populated only after live creation. Placeholder must not be treated as real."
+  },
+  "request_body": {
+    "name": "smid-passguide",
+    "file_ids": [
+      "{{TARGET_FILE_ID:PassInfoFromIG.pdf}}",
+      "{{TARGET_FILE_ID:Guia paso a paso para tramitar el pasaporte venezolano desde venezuela y desde el exterior.pdf}}",
+      "{{TARGET_FILE_ID:Embajada de Venezuela en Berlín – Novedades y guía actualizada.pdf}}"
+    ],
+    "chunking_strategy": {
+      "type": "static",
+      "static": {
+        "max_chunk_size_tokens": 800,
+        "chunk_overlap_tokens": 400
+      }
+    }
+  },
+  "expected_membership_count": 3,
+  "target_vector_store_id": "PENDING"
+}

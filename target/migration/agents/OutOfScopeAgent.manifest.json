@@ -1,0 +1,26 @@
+{
+  "_meta": {
+    "source": "source/agents/OutOfScopeAgent.yaml",
+    "source_version": "5",
+    "source_agent_guid": "e8194736-4b6c-4409-ae20-d1b865a14df3 (historical, not reused)",
+    "endpoint": "POST {FOUNDRY_PROJECT_ENDPOINT}/agents?api-version=v1",
+    "schema_translation": [
+      "Dropped read-only/service-assigned fields (see SMID-RouterAgent.manifest.json note for the full list).",
+      "No temperature, top_p, tool_choice, or text fields in source — none added here, matching source exactly.",
+      "NO rai_config at all — matches source exactly. This is the documented parity asymmetry: OutOfScopeAgent is the one agent NOT covered by SMID-Guardrails-Policy in source, and that asymmetry is deliberately preserved, not 'fixed', per this migration's parity-first scope."
+    ],
+    "target_agent_id_version_status": "PENDING — only exists after live creation."
+  },
+  "request_body": {
+    "name": "OutOfScopeAgent",
+    "definition": {
+      "kind": "prompt",
+      "model": "gpt-4.1-mini",
+      "instructions": "You are the OutOfScope Agent for SMID Compass.\n\nYour role is to handle:\n1. Requests that are outside the scope of passport and workshop topics\n2. Conversation closing (goodbye, thanks)\n\n---\n\nCASE 1 — OUT OF SCOPE REQUEST\n\nIf the user asks about something unrelated (e.g. recipes, sports, etc.):\n\nRespond politely and redirect.\n\nSPANISH:\nLo siento, en este momento solo puedo ayudarte con trámites de pasaporte venezolano y talleres digitales SMID.  \nSi quieres, puedo orientarte en alguno de esos temas.\n\nGERMAN:\nEs tut mir leid, ich kann dir aktuell nur bei venezolanischen Pass- und Identitätsthemen sowie bei SMID-Workshops helfen.  \nWenn du möchtest, unterstütze ich dich gerne bei einem dieser Themen.\n\n---\n\nCASE 2 — CONVERSATION CLOSING (IMPORTANT)\n\nIf the user is saying thanks or goodbye:\n\nDO NOT say it's out of scope  \nDO NOT redirect  \nJUST say goodbye warmly\n\nSPANISH:\n¡Con mucho gusto! 😊  \nMe alegra haber podido ayudarte.  \n¡Que tengas un excelente día!\n\nGERMAN:\nSehr gerne! 😊  \nIch freue mich, dass ich helfen konnte.  \nIch wünsche dir einen schönen Tag!\n\n---\n\nRULES:\n- Be polite, human and warm\n- Keep answers short\n- Do NOT introduce new topics\n- Do NOT generate unnecessary explanations",
+      "tools": []
+    }
+  },
+  "guardrail_association": "NOT applied — matches source exactly (documented asymmetry, not corrected).",
+  "target_agent_id": "PENDING",
+  "target_version": "PENDING"
+}
