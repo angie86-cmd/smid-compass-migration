@@ -59,7 +59,7 @@ Exit criterion: target region and required services confirmed. Met.
 
 ## Phase 3 — Terraform foundation
 
-Status: **CURRENT**
+Status: **DEPLOYED / FINAL VALIDATION IN PROGRESS**
 
 Only after Phase 2 passes.
 
@@ -80,13 +80,21 @@ Use AzureRM where supported. Use AzAPI only when required by missing AzureRM cov
 
 Commit `.terraform.lock.hcl`. Do not commit `*.tfstate`, secrets, production credentials, or sensitive tfvars.
 
-Progress: resource group, remote state, observability (Log Analytics, Application Insights), and the Foundry resource/project are applied. Model deployments, minimum Foundry RBAC, and the DEV cost budget have been prepared in Terraform code. Terraform foundation completion prepared; pending manual review, plan, and apply — not yet marked complete.
+Progress as of 2026-11-04:
+- Resource group, remote state, Log Analytics, Application Insights, Foundry resource, and Foundry project have been deployed.
+- The Terraform foundation was extended to include the source-parity model deployments, minimum Foundry RBAC, DEV cost budget, and `SMID-Guardrails-Policy`.
+- Live Azure validation has started. The custom `SMID-Guardrails-Policy` is present in `rg-smid-compass-dev` and its filter configuration is being verified.
+- The remaining task for this phase is not to redesign Terraform, but to finish validating that the deployed DEV foundation matches the intended configuration.
 
-Exit criterion: `terraform plan` reviewed before apply.
+Exit criterion: deployed Terraform-managed DEV foundation reviewed and validated healthy.
 
 ## Phase 4 — DEV infrastructure deployment
 
-Deploy only DEV. No PROD.
+Status: **CURRENT — VALIDATION / CLOSEOUT**
+
+DEV only. No PROD.
+
+Work resumed on **2026-11-04** after a pause of approximately one month. The focus is to close infrastructure validation before executing the already-prepared application-layer restoration artifacts.
 
 Validate:
 
@@ -98,9 +106,21 @@ Validate:
 - Observability
 - Cost controls
 
-Exit criterion: DEV infrastructure healthy.
+Current validation checklist:
+- Confirm Foundry resource and project are healthy.
+- Confirm both source-parity model deployments and expected versions/capacity.
+- Confirm managed identity and required RBAC assignments.
+- Confirm Log Analytics and Application Insights linkage.
+- Confirm DEV budget/cost notifications.
+- Confirm `SMID-Guardrails-Policy` exists and validate its Prompt/Completion content filters plus Jailbreak behavior.
+
+Exit criterion: DEV infrastructure healthy and ready for application/data-plane restoration.
 
 ## Phase 5 — Knowledge reconstruction
+
+Status: **ARTIFACTS PREPARED / LIVE RESTORATION PENDING**
+
+Target-side restoration specs already exist under `target/migration/`. The knowledge mapping identifies the 10 unique source files that are actually referenced and need target upload; unreferenced preserved source assets are not part of parity restoration.
 
 Using `source/inventory/agent-knowledge-mapping.json`:
 
@@ -114,7 +134,9 @@ Exit criterion: File Search indexes successfully and expected memberships exist.
 
 ## Phase 6 — Agent reconstruction
 
-Recreate the six source agents using the frozen YAML definitions (`source/agents/*.yaml`) as the baseline. Preserve initially:
+Status: **MANIFESTS PREPARED / LIVE CREATION PENDING**
+
+Six target agent manifests already exist under `target/migration/agents/`. Recreate the six source agents using the frozen YAML definitions (`source/agents/*.yaml`) as the baseline. Preserve initially:
 
 - Instructions
 - Model
@@ -130,6 +152,10 @@ Exit criterion: all agents can be invoked individually in nonprofit DEV.
 
 ## Phase 7 — Workflow reconstruction
 
+Status: **MANIFEST/YAML PREPARED / LIVE CREATION PENDING**
+
+The source-parity workflow YAML and target workflow manifest are already prepared under `target/migration/workflow/`.
+
 Recreate source routing semantics. Do not intentionally modernize behavior.
 
 If source workflow technology cannot be recreated, use the minimum compatibility implementation required to preserve equivalent behavior, and record any deviation.
@@ -137,6 +163,10 @@ If source workflow technology cannot be recreated, use the minimum compatibility
 Exit criterion: end-to-end routing works.
 
 ## Phase 8 — Parity validation
+
+Status: **PENDING**
+
+Begin only after knowledge, vector stores, agents, and workflow have been restored successfully in nonprofit DEV.
 
 Create validation cases for:
 
@@ -157,6 +187,19 @@ Create validation cases for:
 Use synthetic/non-sensitive test data. Compare target behavior with the frozen source baseline. Do not require runtime IDs to match.
 
 Exit criterion: functional parity accepted.
+
+## Resume checkpoint — 2026-11-04
+
+The project resumes from this sequence:
+
+1. Finish Phase 4 infrastructure validation.
+2. Execute Phase 5 knowledge upload and vector-store creation.
+3. Execute Phase 6 agent creation.
+4. Execute Phase 7 workflow creation.
+5. Run Phase 8 parity validation.
+6. Create `nonprofit-parity-v1` only after parity is accepted.
+
+Prepared application-layer artifacts are documented in `target/migration/README.md` and `target/migration/mapping/source-to-target-mapping.md`.
 
 ## Phase 9 — Freeze nonprofit parity baseline
 
