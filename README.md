@@ -69,19 +69,37 @@ Do not assume source resource IDs, endpoints, client IDs, principal IDs, agent G
 
 ## Current migration status
 
+Last status refresh: **2026-11-04**
+
 Source snapshot: **COMPLETE** — frozen at `source-snapshot-v1`
 
 Target Migration Architecture v1: **COMPLETE / APPROVED**
 
 Nonprofit tenant preflight: **COMPLETE / PASSED**
 
-Current phase: **PHASE 3 — TERRAFORM FOUNDATION**
+Terraform DEV foundation: **DEPLOYED / FINAL VALIDATION IN PROGRESS**
+
+Application-layer restoration artifacts: **PREPARED / NOT YET EXECUTED**
+- 10 referenced knowledge files mapped for target upload
+- 3 target vector-store specifications prepared
+- 6 agent manifests prepared
+- target guardrail/RAI policy artifact prepared
+- source-parity workflow manifest and YAML prepared
+
+Current phase: **PHASE 4 — DEV INFRASTRUCTURE VALIDATION**
 
 Strategy: migrate → validate parity → modernize
 
-Next technical objective: create the Terraform foundation for nonprofit DEV.
+Work resumed on **2026-11-04** after a pause of approximately one month.
 
-See [docs/architecture/target-migration-architecture-v1.md](docs/architecture/target-migration-architecture-v1.md), [docs/plans/nonprofit-migration-plan-v1.md](docs/plans/nonprofit-migration-plan-v1.md), and [docs/preflight/nonprofit-preflight.md](docs/preflight/nonprofit-preflight.md).
+Current technical objective:
+1. Finish post-deployment validation of the nonprofit DEV infrastructure, including model deployments, RBAC, managed identity, observability, budget/cost controls, and `SMID-Guardrails-Policy`.
+2. Once DEV infrastructure is confirmed healthy, execute application-layer restoration in this order: knowledge files → vector stores → agents → workflow.
+3. Run parity validation and freeze the validated nonprofit baseline as `nonprofit-parity-v1`.
+
+No PROD deployment or Modernization v2 work should begin before parity validation is accepted.
+
+See [docs/architecture/target-migration-architecture-v1.md](docs/architecture/target-migration-architecture-v1.md), [docs/plans/nonprofit-migration-plan-v1.md](docs/plans/nonprofit-migration-plan-v1.md), [target/migration/README.md](target/migration/README.md), and [docs/preflight/nonprofit-preflight.md](docs/preflight/nonprofit-preflight.md).
 
 ## Repository rules
 
