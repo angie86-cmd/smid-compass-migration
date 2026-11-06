@@ -69,7 +69,7 @@ Do not assume source resource IDs, endpoints, client IDs, principal IDs, agent G
 
 ## Current migration status
 
-Last status refresh: **2026-11-04**
+Last status refresh: **2026-11-06**
 
 Source snapshot: **COMPLETE** — frozen at `source-snapshot-v1`
 
@@ -79,14 +79,15 @@ Nonprofit tenant preflight: **COMPLETE / PASSED**
 
 Terraform DEV foundation: **COMPLETE / VALIDATED**
 
-Application-layer restoration artifacts: **PREPARED / NOT YET EXECUTED**
-- 10 referenced knowledge files mapped for target upload
-- 3 target vector-store specifications prepared
-- 6 agent manifests prepared
-- target guardrail/RAI policy artifact prepared
+Application-layer restoration status:
+- Phase 5 knowledge reconstruction: **COMPLETE**
+- 10 Agent Service files uploaded and mapped to new target IDs
+- 3 target vector stores created with source-parity memberships and static 800/400 chunking
+- `LOPNA 2015.pdf` reproduces its historical source ingestion failure in the legacy vector store (expected parity condition)
+- 6 agent manifests prepared for live creation
 - source-parity workflow manifest and YAML prepared
 
-Current phase: **PHASE 5 — KNOWLEDGE RECONSTRUCTION**
+Current phase: **PHASE 6 — AGENT RECONSTRUCTION**
 
 Strategy: migrate → validate parity → modernize
 
@@ -102,9 +103,17 @@ Phase 4 infrastructure validation is now complete. Validation confirmed:
 - Application Insights and Log Analytics healthy and linked
 - DEV budget present at 50 EUR/month with enabled 50%, 80%, and 100% actual-spend notifications
 
+Phase 5 completed on **2026-11-06**. Live results:
+- `smid-passguide`: 3/3 completed
+- `smid-workshopguide`: 2/2 completed
+- `smid-compass-agent-legacy`: 7 completed / 1 failed, where the failed membership is `LOPNA 2015.pdf`, matching the historical source failure
+- all target File Search memberships use static chunking with `max_chunk_size_tokens: 800` and `chunk_overlap_tokens: 400`
+- current Foundry live behavior required Agent Service `file_id` attachments; Dataset `data_source` attachments were rejected on this deployment
+- the Embajada PDF required an ASCII-safe upload filename (`EmbajadaBerlin_ascii.pdf`) because the live Files API returned HTTP 500 for the original non-ASCII multipart filename; file content remained byte-identical
+
 Current technical objective:
-1. Execute Phase 5 knowledge reconstruction: upload the 10 referenced source files and create the 3 target vector stores using new target IDs.
-2. Continue with agent restoration, then workflow restoration.
+1. Execute Phase 6: create the six source-parity agents using the prepared manifests and the new target vector-store IDs.
+2. Restore the workflow in Phase 7.
 3. Run parity validation and freeze the validated nonprofit baseline as `nonprofit-parity-v1`.
 
 No PROD deployment or Modernization v2 work should begin before parity validation is accepted.
