@@ -1,6 +1,6 @@
 # SMID Compass — Source → Target Mapping (Application-Layer Restoration)
 
-Status: **prepared, not yet executed.** Nothing in this document has been created in Azure. All artifacts in `target/migration/` are local files for review before any live Foundry/ARM call is made, per the parity-restoration task's Step 7/12 checkpoints.
+Status: **Phase 5 executed in nonprofit DEV on 2026-11-06. Phase 6 agent restoration is next.** Knowledge files and vector stores now exist live; agent/workflow artifacts remain prepared but not yet created.
 
 `source/**` is unchanged. `terraform/**` is unchanged. This restoration is entirely application/data-plane (Foundry Agents API + one ARM RAI-policy resource), not infrastructure.
 
@@ -26,7 +26,7 @@ Researched against the authoritative current source (Azure/azure-rest-api-specs 
 5. **Workflow** — create the workflow agent per `target/migration/workflow/`, after all 5 agents it references by name exist.
 6. **Minimal provisioning verification only** (Step 11): confirm each resource exists, has the expected tools/model/vector-store attached — no semantic prompts, no functional/parity testing (deferred to next week).
 
-Nothing below this line has happened yet.
+Steps 1–3 have now been executed/validated in nonprofit DEV. Steps 4–6 remain pending.
 
 ## 3. Agent mapping
 
@@ -46,7 +46,10 @@ Router/PassGuide/WorkshopGuide/legacy all use `temperature: 0.3`, `top_p: 1` (so
 - 25 physical assets preserved in `source/data/`; 13 vector-store memberships existed in source; **10 unique physical files** are actually referenced (some files are shared across two source vector stores under different `assistant-*` IDs — uploaded once per file in target, ID reused). Full detail: `target/migration/knowledge/file-mapping.json`.
 - 15 preserved local assets are **not** uploaded — never referenced by any source membership, uploading them would restore nothing.
 - Chunking preserved exactly: `static`, `max_chunk_size_tokens: 800`, `chunk_overlap_tokens: 400` (this also happens to match the current API's own default, so no override risk).
-- `LOPNA 2015.pdf` had `source_vector_status: failed` in the legacy store. This is preserved as a documented historical fact. The physical file is included in the target legacy-store request so reconstruction can be attempted, but if it succeeds where source failed, that's a noted platform difference — not something to claim as an intentional fix.
+- `LOPNA 2015.pdf` had `source_vector_status: failed` in the source legacy store. Target Agent Service upload succeeded, but target vector-store parsing also failed (`invalid_file`, no extractable content). This reproduces the historical source failure and is accepted as source-parity behavior.
+- Live target vector stores: `smid-passguide` = `vs_VvDHhLobUnN8s9YC4uk83BWU`; `smid-workshopguide` = `vs_HMvRtKkm9ew6RzyJ56zIeJvC`; `smid-compass-agent-legacy` = `vs_hUQ2f7P22jDSvP9cS9MhRYvM`.
+- Live API difference: Dataset-backed `data_source` / `data_sources` attachment is rejected on this deployment despite appearing in the published TypeSpec. Agent Service Files with `file_id` are the working mechanism used.
+- Live filename difference: the Embajada PDF required an ASCII-safe multipart upload filename (`EmbajadaBerlin_ascii.pdf`) because the original accented/en-dash filename deterministically returned HTTP 500. Uploaded bytes are identical to the source file.
 
 ## 5. Guardrails
 
@@ -58,7 +61,7 @@ Router → (passport → PassGuide → Safety → end) | (workshop → WorkshopG
 
 ## 7. Open items requiring a decision or verification before live execution
 
-1. **Jailbreak RAI filter mapping** — flagged in the RAI policy artifact, not resolved.
+1. **Jailbreak RAI filter mapping** — **resolved live**. `SMID-Guardrails-Policy` is deployed and validated; Jailbreak is enabled for Prompt with the accepted live configuration.
 2. **`Foundry-Features` header exact value** for creating the workflow agent — the opt-in requirement is confirmed, the literal header string is not independently verified against a live call.
 3. **`web_search` tool schema** for Safety — assumed identical to source's zero-parameter shape; not independently re-verified against current docs this session (low risk, since `tools` is typed as the standard `OpenAI.Tool[]` union and source already used the simplest possible form).
 
