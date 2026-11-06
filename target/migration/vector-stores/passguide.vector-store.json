@@ -3,14 +3,14 @@
     "purpose": "Target vector store for SMID-PassGuide's file_search tool.",
     "source_vector_store_id": "vs_kFHmEd5wmTctKaPyut53MRf0 (historical, never reused)",
     "endpoint": "POST {FOUNDRY_PROJECT_ENDPOINT}/openai/v1/vector_stores",
-    "target_vector_store_id_status": "PENDING — populated only after live creation. Placeholder must not be treated as real."
+    "target_vector_store_id_status": "COMPLETE — live nonprofit Foundry DEV vector store created 2026-11-06."
   },
   "request_body": {
     "name": "smid-passguide",
     "file_ids": [
-      "{{TARGET_FILE_ID:PassInfoFromIG.pdf}}",
-      "{{TARGET_FILE_ID:Guia paso a paso para tramitar el pasaporte venezolano desde venezuela y desde el exterior.pdf}}",
-      "{{TARGET_FILE_ID:Embajada de Venezuela en Berlín – Novedades y guía actualizada.pdf}}"
+      "assistant-4AiHD2sgJVLNUFg1jMqYFb",
+      "assistant-RwMc6NzsCaNqATvsZMnxMv",
+      "assistant-ADACFeVuuLSUKXwbVzogwr"
     ],
     "chunking_strategy": {
       "type": "static",
@@ -21,5 +21,12 @@
     }
   },
   "expected_membership_count": 3,
-  "target_vector_store_id": "PENDING"
+  "target_vector_store_id": "vs_VvDHhLobUnN8s9YC4uk83BWU",
+  "live_status": {
+    "total": 3,
+    "completed": 3,
+    "failed": 0,
+    "in_progress": 0,
+    "status": "completed"
+  }
 }
