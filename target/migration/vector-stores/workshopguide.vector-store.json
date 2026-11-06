@@ -3,13 +3,13 @@
     "purpose": "Target vector store for SMID-WorkshopGuide's file_search tool.",
     "source_vector_store_id": "vs_i72YNBIWpR8vyXns4tb2e4vC (historical, never reused)",
     "endpoint": "POST {FOUNDRY_PROJECT_ENDPOINT}/openai/v1/vector_stores",
-    "target_vector_store_id_status": "PENDING — populated only after live creation. Placeholder must not be treated as real."
+    "target_vector_store_id_status": "COMPLETE — live nonprofit Foundry DEV vector store created 2026-11-06."
   },
   "request_body": {
     "name": "smid-workshopguide",
     "file_ids": [
-      "{{TARGET_FILE_ID:WorkshopsInfoFromIG.pdf}}",
-      "{{TARGET_FILE_ID:GUIA RAPIDA SOBRE EL PROGRAMA DE TALLERES 2026.pdf}}"
+      "assistant-CEwAQEhbS3vzqkn2diDUfv",
+      "assistant-TGgb5Z5GU66muxxhZYKESG"
     ],
     "chunking_strategy": {
       "type": "static",
@@ -20,5 +20,12 @@
     }
   },
   "expected_membership_count": 2,
-  "target_vector_store_id": "PENDING"
+  "target_vector_store_id": "vs_HMvRtKkm9ew6RzyJ56zIeJvC",
+  "live_status": {
+    "total": 2,
+    "completed": 2,
+    "failed": 0,
+    "in_progress": 0,
+    "status": "completed"
+  }
 }
