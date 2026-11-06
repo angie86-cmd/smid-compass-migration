@@ -77,7 +77,7 @@ Target Migration Architecture v1: **COMPLETE / APPROVED**
 
 Nonprofit tenant preflight: **COMPLETE / PASSED**
 
-Terraform DEV foundation: **DEPLOYED / FINAL VALIDATION IN PROGRESS**
+Terraform DEV foundation: **COMPLETE / VALIDATED**
 
 Application-layer restoration artifacts: **PREPARED / NOT YET EXECUTED**
 - 10 referenced knowledge files mapped for target upload
@@ -86,15 +86,25 @@ Application-layer restoration artifacts: **PREPARED / NOT YET EXECUTED**
 - target guardrail/RAI policy artifact prepared
 - source-parity workflow manifest and YAML prepared
 
-Current phase: **PHASE 4 — DEV INFRASTRUCTURE VALIDATION**
+Current phase: **PHASE 5 — KNOWLEDGE RECONSTRUCTION**
 
 Strategy: migrate → validate parity → modernize
 
 Work resumed on **2026-11-04** after a pause of approximately one month.
 
+Phase 4 infrastructure validation is now complete. Validation confirmed:
+- correct nonprofit tenant and subscription context
+- `gpt-4.1-mini` deployment: version `2025-04-14`, GlobalStandard, capacity 50
+- `text-embedding-3-small` deployment: version `1`, GlobalStandard, capacity 120
+- `SMID-Guardrails-Policy` present with expected Prompt/Completion filters and Prompt-side Jailbreak protection
+- Foundry project system-assigned managed identity present
+- required Foundry User RBAC assignments present
+- Application Insights and Log Analytics healthy and linked
+- DEV budget present at 50 EUR/month with enabled 50%, 80%, and 100% actual-spend notifications
+
 Current technical objective:
-1. Finish post-deployment validation of the nonprofit DEV infrastructure, including model deployments, RBAC, managed identity, observability, budget/cost controls, and `SMID-Guardrails-Policy`.
-2. Once DEV infrastructure is confirmed healthy, execute application-layer restoration in this order: knowledge files → vector stores → agents → workflow.
+1. Execute Phase 5 knowledge reconstruction: upload the 10 referenced source files and create the 3 target vector stores using new target IDs.
+2. Continue with agent restoration, then workflow restoration.
 3. Run parity validation and freeze the validated nonprofit baseline as `nonprofit-parity-v1`.
 
 No PROD deployment or Modernization v2 work should begin before parity validation is accepted.
