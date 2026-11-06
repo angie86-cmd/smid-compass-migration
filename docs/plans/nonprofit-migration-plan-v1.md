@@ -59,7 +59,7 @@ Exit criterion: target region and required services confirmed. Met.
 
 ## Phase 3 — Terraform foundation
 
-Status: **DEPLOYED / FINAL VALIDATION IN PROGRESS**
+Status: **COMPLETE**
 
 Only after Phase 2 passes.
 
@@ -121,7 +121,7 @@ Exit criterion: DEV infrastructure healthy and ready for application/data-plane 
 
 ## Phase 5 — Knowledge reconstruction
 
-Status: **CURRENT — LIVE RESTORATION NEXT**
+Status: **COMPLETE**
 
 Target-side restoration specs already exist under `target/migration/`. The knowledge mapping identifies the 10 unique source files that are actually referenced and need target upload; unreferenced preserved source assets are not part of parity restoration.
 
@@ -133,11 +133,21 @@ Using `source/inventory/agent-knowledge-mapping.json`:
 - Recreate: `SMID-PassGuide` → 3 files; `SMID-WorkshopGuide` → 2 files; legacy `smid-compass-agent` → historical file membership as required for parity.
 - Generate new target IDs. Do not reuse source IDs.
 
-Exit criterion: File Search indexes successfully and expected memberships exist.
+Live result (2026-11-06):
+- 10 unique Agent Service files uploaded and assigned new target file IDs.
+- `smid-passguide`: 3/3 memberships completed.
+- `smid-workshopguide`: 2/2 memberships completed.
+- `smid-compass-agent-legacy`: 7 completed / 1 failed.
+- The sole failed legacy membership is `LOPNA 2015.pdf`; target parsing reports `invalid_file` / no extractable content, reproducing the historical source vector-store failure already recorded in the frozen snapshot.
+- Static chunking `800 / 400` is preserved on all memberships.
+- Live Foundry API behavior on this project rejects Dataset-backed `data_source` / `data_sources` vector-store attachment. Agent Service `file_id` attachment is the working path used for parity restoration.
+- The Embajada PDF required an ASCII-safe upload filename due a deterministic HTTP 500 from `/openai/v1/files` when the original non-ASCII filename was used. The uploaded content is byte-identical to the source file.
+
+Exit criterion: File Search indexes successfully and expected source-parity memberships exist, including preservation of the known LOPNA failure. **Met.**
 
 ## Phase 6 — Agent reconstruction
 
-Status: **MANIFESTS PREPARED / LIVE CREATION PENDING**
+Status: **CURRENT — LIVE CREATION NEXT**
 
 Six target agent manifests already exist under `target/migration/agents/`. Recreate the six source agents using the frozen YAML definitions (`source/agents/*.yaml`) as the baseline. Preserve initially:
 
@@ -195,11 +205,10 @@ Exit criterion: functional parity accepted.
 
 The project now proceeds from this sequence:
 
-1. Execute Phase 5 knowledge upload and vector-store creation.
-2. Execute Phase 6 agent creation.
-3. Execute Phase 7 workflow creation.
-4. Run Phase 8 parity validation.
-5. Create `nonprofit-parity-v1` only after parity is accepted.
+1. Execute Phase 6 agent creation.
+2. Execute Phase 7 workflow creation.
+3. Run Phase 8 parity validation.
+4. Create `nonprofit-parity-v1` only after parity is accepted.
 
 Prepared application-layer artifacts are documented in `target/migration/README.md` and `target/migration/mapping/source-to-target-mapping.md`.
 
