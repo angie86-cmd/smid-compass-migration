@@ -4,72 +4,108 @@
     "source_evidence": "source/inventory/agent-knowledge-mapping.json, source/inventory/data-files-manifest.json",
     "upload_endpoint": "POST {FOUNDRY_PROJECT_ENDPOINT}/openai/v1/files  (multipart form: purpose=assistants, file=@<local_relative_path>)",
     "authentication": "Bearer token: az account get-access-token --scope https://ai.azure.com/.default",
-    "target_file_id_status": "PENDING — populated only after each file is actually uploaded live. Placeholders below must not be treated as real IDs."
+    "target_file_id_status": "COMPLETE — populated from live nonprofit Foundry DEV restoration on 2026-11-06."
   },
   "files": [
     {
       "local_relative_path": "source/data/SMID training info/PassInfoFromIG.pdf",
       "source_file_id": "assistant-Y8y6MrRDSoaRowYVy4T8Kf",
-      "used_by_agents": ["SMID-PassGuide"],
-      "target_file_id": "PENDING"
+      "used_by_agents": [
+        "SMID-PassGuide"
+      ],
+      "target_file_id": "assistant-4AiHD2sgJVLNUFg1jMqYFb",
+      "target_file_status": "processed"
     },
     {
       "local_relative_path": "source/data/SMID training info/Guia paso a paso para tramitar el pasaporte venezolano desde venezuela y desde el exterior.pdf",
       "source_file_id": "assistant-XqU9H6scexYYcTVz3tjWpL / assistant-Uht3XLijkD2vFZRUBSgzoT",
-      "used_by_agents": ["SMID-PassGuide", "smid-compass-agent"],
+      "used_by_agents": [
+        "SMID-PassGuide",
+        "smid-compass-agent"
+      ],
       "note": "Same physical file (identical sha256) had two separate source_file_id values because it was uploaded independently to two source vector stores. Target: upload once, reuse the resulting target file ID in both target vector stores.",
-      "target_file_id": "PENDING"
+      "target_file_id": "assistant-RwMc6NzsCaNqATvsZMnxMv",
+      "target_file_status": "processed"
     },
     {
       "local_relative_path": "source/data/SMID training info/Embajada de Venezuela en Berlín – Novedades y guía actualizada.pdf",
       "source_file_id": "assistant-NJDEajAV6NjrcAkRWGsCdJ / assistant-BeeQf539WCv4NV6z1H54sJ",
-      "used_by_agents": ["SMID-PassGuide", "smid-compass-agent"],
-      "note": "Same physical file, uploaded independently to two source vector stores (same sha256). Source filename has mojibake corruption in the raw export; local_filename is the correct physical filename. Target: upload once, reuse.",
-      "target_file_id": "PENDING"
+      "used_by_agents": [
+        "SMID-PassGuide",
+        "smid-compass-agent"
+      ],
+      "note": "Same physical file, uploaded independently to two source vector stores (same sha256). Source filename has mojibake corruption in the raw export; local_filename is the correct physical filename. Target: upload once, reuse. LIVE TARGET: original non-ASCII multipart filename caused deterministic HTTP 500; byte-identical ASCII-safe upload filename used.",
+      "target_file_id": "assistant-ADACFeVuuLSUKXwbVzogwr",
+      "target_file_status": "processed",
+      "target_uploaded_filename": "EmbajadaBerlin_ascii.pdf"
     },
     {
       "local_relative_path": "source/data/SMID training info/WorkshopsInfoFromIG.pdf",
       "source_file_id": "assistant-CzH2EXdhGv1Rm7KMM5DuhR",
-      "used_by_agents": ["SMID-WorkshopGuide"],
-      "target_file_id": "PENDING"
+      "used_by_agents": [
+        "SMID-WorkshopGuide"
+      ],
+      "target_file_id": "assistant-CEwAQEhbS3vzqkn2diDUfv",
+      "target_file_status": "processed"
     },
     {
       "local_relative_path": "source/data/SMID training info/GUIA RAPIDA SOBRE EL PROGRAMA DE TALLERES 2026.pdf",
       "source_file_id": "assistant-7r73TS1yhdzuimLukuz81b / assistant-SncWcFLFxWYfWhMV96uoYe",
-      "used_by_agents": ["SMID-WorkshopGuide", "smid-compass-agent"],
+      "used_by_agents": [
+        "SMID-WorkshopGuide",
+        "smid-compass-agent"
+      ],
       "note": "Same physical file, uploaded independently to two source vector stores. Target: upload once, reuse.",
-      "target_file_id": "PENDING"
+      "target_file_id": "assistant-TGgb5Z5GU66muxxhZYKESG",
+      "target_file_status": "processed"
     },
     {
       "local_relative_path": "source/data/SMID training info/LOPNA 2015.pdf",
       "source_file_id": "assistant-6uaUj899yb1Un3XN3qXVzd",
-      "used_by_agents": ["smid-compass-agent"],
-      "note": "HISTORICAL: source_vector_status was 'failed' (source_usage_bytes: 0) in the legacy vector store. This is a frozen source fact, not corrected. The physical file may be uploaded to attempt reconstruction of the legacy store, but the historical failure must remain documented here and in the mapping doc, not silently reinterpreted as having succeeded.",
-      "target_file_id": "PENDING"
+      "used_by_agents": [
+        "smid-compass-agent"
+      ],
+      "note": "HISTORICAL: source_vector_status was 'failed' (source_usage_bytes: 0) in the legacy vector store. This is a frozen source fact, not corrected. The physical file may be uploaded to attempt reconstruction of the legacy store, but the historical failure must remain documented here and in the mapping doc, not silently reinterpreted as having succeeded. LIVE TARGET: Agent Service file upload processed successfully, but legacy vector-store ingestion failed with the same effective source-parity condition (no extractable content).",
+      "target_file_id": "assistant-7Pw9EW5SdzDcnEjK9jY9op",
+      "target_file_status": "processed",
+      "target_vector_status": "failed",
+      "target_vector_error": "invalid_file — The file could not be parsed because it is empty."
     },
     {
       "local_relative_path": "source/data/SMID training info/ley-de-registro-de-antecedentes-penales.pdf",
       "source_file_id": "assistant-LJc4iLcgyCb6D3TbCGQ77V",
-      "used_by_agents": ["smid-compass-agent"],
-      "target_file_id": "PENDING"
+      "used_by_agents": [
+        "smid-compass-agent"
+      ],
+      "target_file_id": "assistant-XgMPDqn88hExr8WWKWftQS",
+      "target_file_status": "processed"
     },
     {
       "local_relative_path": "source/data/SMID training info/presentacion general.pdf",
       "source_file_id": "assistant-SKdhcErxJDGaF7pCHQA8kM",
-      "used_by_agents": ["smid-compass-agent"],
-      "target_file_id": "PENDING"
+      "used_by_agents": [
+        "smid-compass-agent"
+      ],
+      "target_file_id": "assistant-H1zGwsEhtJrUSdi2zkAP72",
+      "target_file_status": "processed"
     },
     {
       "local_relative_path": "source/data/SMID training info/Autorizacion envio pasaporte a domicilio (1).pdf.pdf",
       "source_file_id": "assistant-Dc5TApFWxx9X52WSe8uSBp",
-      "used_by_agents": ["smid-compass-agent"],
-      "target_file_id": "PENDING"
+      "used_by_agents": [
+        "smid-compass-agent"
+      ],
+      "target_file_id": "assistant-9sFcMbGVoQUGxkDb8usASQ",
+      "target_file_status": "processed"
     },
     {
       "local_relative_path": "source/data/SMID training info/ley-nacionalidad-ciudadania.pdf",
       "source_file_id": "assistant-FSxghh6GBPWesKdEm5sb64",
-      "used_by_agents": ["smid-compass-agent"],
-      "target_file_id": "PENDING"
+      "used_by_agents": [
+        "smid-compass-agent"
+      ],
+      "target_file_id": "assistant-HrJAqawD6cVEJeaWG4dxHW",
+      "target_file_status": "processed"
     }
   ],
   "not_uploaded_intentionally": {
