@@ -90,11 +90,11 @@ Exit criterion: deployed Terraform-managed DEV foundation reviewed and validated
 
 ## Phase 4 — DEV infrastructure deployment
 
-Status: **CURRENT — VALIDATION / CLOSEOUT**
+Status: **COMPLETE**
 
 DEV only. No PROD.
 
-Work resumed on **2026-11-04** after a pause of approximately one month. The focus is to close infrastructure validation before executing the already-prepared application-layer restoration artifacts.
+Work resumed on **2026-11-04** after a pause of approximately one month. Infrastructure validation has now been completed successfully.
 
 Validate:
 
@@ -106,19 +106,22 @@ Validate:
 - Observability
 - Cost controls
 
-Current validation checklist:
-- Confirm Foundry resource and project are healthy.
-- Confirm both source-parity model deployments and expected versions/capacity.
-- Confirm managed identity and required RBAC assignments.
-- Confirm Log Analytics and Application Insights linkage.
-- Confirm DEV budget/cost notifications.
-- Confirm `SMID-Guardrails-Policy` exists and validate its Prompt/Completion content filters plus Jailbreak behavior.
+Validation completed:
+- Foundry resource and project confirmed healthy.
+- `gpt-4.1-mini`: version `2025-04-14`, GlobalStandard, capacity 50.
+- `text-embedding-3-small`: version `1`, GlobalStandard, capacity 120.
+- Foundry project uses a system-assigned managed identity.
+- Developer identity and Foundry project managed identity have the expected Foundry User RBAC assignment on the Foundry resource.
+- Log Analytics and Application Insights both report `Succeeded` and Application Insights is linked to the expected workspace.
+- DEV budget `budget-smid-compass-dev` exists at 50 EUR/month.
+- Budget notifications are enabled at 50%, 80%, and 100% of actual spend.
+- `SMID-Guardrails-Policy` exists with the expected Hate, SelfHarm, Sexual, and Violence filters for Prompt and Completion, plus Jailbreak for Prompt.
 
-Exit criterion: DEV infrastructure healthy and ready for application/data-plane restoration.
+Exit criterion: DEV infrastructure healthy and ready for application/data-plane restoration. **Met.**
 
 ## Phase 5 — Knowledge reconstruction
 
-Status: **ARTIFACTS PREPARED / LIVE RESTORATION PENDING**
+Status: **CURRENT — LIVE RESTORATION NEXT**
 
 Target-side restoration specs already exist under `target/migration/`. The knowledge mapping identifies the 10 unique source files that are actually referenced and need target upload; unreferenced preserved source assets are not part of parity restoration.
 
@@ -190,14 +193,13 @@ Exit criterion: functional parity accepted.
 
 ## Resume checkpoint — 2026-11-04
 
-The project resumes from this sequence:
+The project now proceeds from this sequence:
 
-1. Finish Phase 4 infrastructure validation.
-2. Execute Phase 5 knowledge upload and vector-store creation.
-3. Execute Phase 6 agent creation.
-4. Execute Phase 7 workflow creation.
-5. Run Phase 8 parity validation.
-6. Create `nonprofit-parity-v1` only after parity is accepted.
+1. Execute Phase 5 knowledge upload and vector-store creation.
+2. Execute Phase 6 agent creation.
+3. Execute Phase 7 workflow creation.
+4. Run Phase 8 parity validation.
+5. Create `nonprofit-parity-v1` only after parity is accepted.
 
 Prepared application-layer artifacts are documented in `target/migration/README.md` and `target/migration/mapping/source-to-target-mapping.md`.
 
