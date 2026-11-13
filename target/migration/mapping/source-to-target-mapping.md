@@ -1,6 +1,6 @@
 # SMID Compass — Source → Target Mapping (Application-Layer Restoration)
 
-Status: **Phase 5 executed in nonprofit DEV on 2026-11-06. Phase 6 agent restoration is next.** Knowledge files and vector stores now exist live; agent/workflow artifacts remain prepared but not yet created.
+Status: **Phases 5–9 complete (knowledge/agents/workflow live: 2026-11-06 and 2026-11-13; parity smoke validation passed and baseline documented: 2026-11-13).** The migration-to-parity milestone is complete. The Git tag `nonprofit-parity-v1` is pending manual creation. The next technical work is Modernization v2 (Microsoft Agent Framework migration in DEV), not started.
 
 `source/**` is unchanged. `terraform/**` is unchanged. This restoration is entirely application/data-plane (Foundry Agents API + one ARM RAI-policy resource), not infrastructure.
 
@@ -26,7 +26,7 @@ Researched against the authoritative current source (Azure/azure-rest-api-specs 
 5. **Workflow** — create the workflow agent per `target/migration/workflow/`, after all 5 agents it references by name exist.
 6. **Minimal provisioning verification only** (Step 11): confirm each resource exists, has the expected tools/model/vector-store attached — no semantic prompts, no functional/parity testing (deferred to next week).
 
-Steps 1–3 have now been executed/validated in nonprofit DEV. Steps 4–6 remain pending.
+Steps 1–5 have now been executed/validated in nonprofit DEV. Step 6 (minimal provisioning verification) is satisfied by the live field-level checks performed during steps 4–5; functional/semantic parity testing (Phase 8) remains pending.
 
 ## 3. Agent mapping
 
@@ -40,6 +40,21 @@ Steps 1–3 have now been executed/validated in nonprofit DEV. Steps 4–6 remai
 | smid-compass-agent | 6 | smid-compass-agent | gpt-4.1-mini | file_search → legacy store (8 files) | Applied | Legacy candidate, preserved, not retired or redesigned. |
 
 Router/PassGuide/WorkshopGuide/legacy all use `temperature: 0.3`, `top_p: 1` (source values, unchanged).
+
+### Live target agent versions (2026-11-13)
+
+Target agent version numbers are a target-runtime fact only; they are not expected to match, and do not reuse, source version numbers (source versions are listed in the "Source version" column above).
+
+| Target name | Live target version | State / status |
+|---|---|---|
+| SMID-RouterAgent | **2** | enabled / active |
+| SMID-PassGuide | 1 | enabled / active |
+| SMID-WorkshopGuide | 1 | enabled / active |
+| SMID-SafetyAgent | 1 | enabled / active |
+| OutOfScopeAgent | 1 | enabled / active |
+| smid-compass-agent | 1 | enabled / active |
+
+`SMID-RouterAgent` is at target version 2, not 1, because the first live creation attempt was affected by a local UTF-8 extraction defect in the migration tooling (not a Foundry API defect): non-ASCII arrow characters in the instructions were corrupted during extraction from the manifest file. This was caught via byte-level verification, and a corrected definition was pushed as version 2 using `POST /agents/SMID-RouterAgent?api-version=v1` (the dedicated update-agent route; `POST /agents` returns `HTTP 409 Conflict` for an existing agent name rather than creating a new version). Version 2 was verified field-for-field identical to the prepared manifest, including correct byte-level arrow characters. Version 1 remains in the agent's version history as a superseded, inactive version; `latest` correctly resolves to version 2.
 
 ## 4. Knowledge / vector stores
 
@@ -59,10 +74,22 @@ Custom policy `SMID-Guardrails-Policy` applied to: Router, PassGuide, WorkshopGu
 
 Router → (passport → PassGuide → Safety → end) | (workshop → WorkshopGuide → Safety → end) | (otherwise → OutOfScope → end, **bypassing Safety**). Preserved exactly, including the known Safety input mismatch (instructions expect `<route> | <answer>`, workflow sends answer-only). Not fixed — this is explicitly deferred to Modernization v2, per the approved migration strategy.
 
-## 7. Open items requiring a decision or verification before live execution
+**Live result (2026-11-13):** `SMID-compass-workflow` created via `POST {FOUNDRY_PROJECT_ENDPOINT}/agents?api-version=v1` with `kind: workflow` and the required preview header `Foundry-Features: WorkflowAgents=V1Preview`. Live identity: `SMID-compass-workflow:1`, version `1`, `enabled`/`active`, `draft: false`. The live `definition.workflow` string matched `target/migration/workflow/SMID-compass-workflow.yaml` exactly, byte-for-byte. All five referenced agents resolved correctly against their live target versions (`SMID-RouterAgent` v2, `SMID-PassGuide` v1, `SMID-WorkshopGuide` v1, `SMID-SafetyAgent` v1, `OutOfScopeAgent` v1). No modernization was performed, and the OutOfScope-bypasses-Safety asymmetry and the Safety input mismatch were both preserved unchanged. Microsoft Foundry declarative workflows are scheduled for retirement on 2026-12-01 — this does not invalidate this parity restoration; migration to Microsoft Agent Framework remains deferred to Modernization v2 (Phase 11), after the nonprofit parity baseline is validated.
+
+## 7. Open items (resolved)
 
 1. **Jailbreak RAI filter mapping** — **resolved live**. `SMID-Guardrails-Policy` is deployed and validated; Jailbreak is enabled for Prompt with the accepted live configuration.
-2. **`Foundry-Features` header exact value** for creating the workflow agent — the opt-in requirement is confirmed, the literal header string is not independently verified against a live call.
-3. **`web_search` tool schema** for Safety — assumed identical to source's zero-parameter shape; not independently re-verified against current docs this session (low risk, since `tools` is typed as the standard `OpenAI.Tool[]` union and source already used the simplest possible form).
+2. **`Foundry-Features` header exact value** for creating the workflow agent — **resolved live**. Confirmed as `Foundry-Features: WorkflowAgents=V1Preview` both by a successful live call and by independent verification against the current Foundry TypeSpec (`AgentDefinitionOptInKeys.workflow_agents_v1_preview` in `specification/ai-foundry/data-plane/Foundry/src/common/servicepatterns.tsp`).
+3. **`web_search` tool schema** for Safety — **resolved live**. The source's zero-parameter shape (`{"type": "web_search"}`) was accepted as-is by `POST /agents?api-version=v1`; no schema incompatibility.
 
-None of these block preparing the artifacts (done). They should be resolved or explicitly accepted before Step 4 (agents) and the RAI policy PUT actually execute.
+All open items from this round of migration are resolved. Phase 8 functional/semantic parity validation has passed (see [docs/validation/phase-8-parity-validation.md](../../docs/validation/phase-8-parity-validation.md)); remaining work is Modernization v2, not further compatibility research or parity migration.
+
+## 8. Phase 8 parity validation result (2026-11-13)
+
+**PARITY SMOKE TEST PASSED.** Six synthetic, bilingual smoke tests (Passport/Workshop/Out-of-scope × Spanish/German) were run live against the workflow via `POST openai/v1/conversations` + `POST openai/v1/responses` (`agent_reference`, `Foundry-Features: WorkflowAgents=V1Preview`). All six passed: correct Router classification in both languages, successful File Search execution for PassGuide/WorkshopGuide against their migrated vector stores, Safety executing on the passport/workshop paths and bypassed on the out-of-scope path exactly as in source, the workflow reaching `End` in every case, no migrated-resource reference errors, and language behavior (bilingual ES+DE for PassGuide/WorkshopGuide/Safety; single input-matching language for OutOfScopeAgent) matching each agent's source instructions exactly. This was a migration parity smoke validation, not exhaustive product QA. Full evidence is permanent in [docs/validation/phase-8-parity-validation.md](../../docs/validation/phase-8-parity-validation.md).
+
+During this validation, the live `SMID-compass-workflow` was observed at version 3 (Phase 7 had observed version 1); versions 2/3 differ from version 1 only in comments — the functional workflow YAML remains equivalent to the validated parity definition across all three versions. This is target-side versioning behavior with no functional parity impact; it was not modified or downgraded.
+
+## 9. Phase 9 — parity baseline (2026-11-13)
+
+The source-parity migration is reconstructed (Phases 5–7), end-to-end parity smoke validation has passed (Phase 8), the validation evidence is stored permanently in this repository, and this repository state represents the validated nonprofit parity baseline. The Git tag `nonprofit-parity-v1` is pending manual creation, together with the final commit and push. The migration-to-parity milestone is complete; the next technical work is Modernization v2 (Microsoft Agent Framework migration in DEV, Phase 11), not started — the current agents, workflow, and other live resources must remain unmodified until that work explicitly branches from this baseline.

@@ -69,7 +69,7 @@ Do not assume source resource IDs, endpoints, client IDs, principal IDs, agent G
 
 ## Current migration status
 
-Last status refresh: **2026-11-06**
+Last status refresh: **2026-11-13**
 
 Source snapshot: **COMPLETE** — frozen at `source-snapshot-v1`
 
@@ -84,10 +84,27 @@ Application-layer restoration status:
 - 10 Agent Service files uploaded and mapped to new target IDs
 - 3 target vector stores created with source-parity memberships and static 800/400 chunking
 - `LOPNA 2015.pdf` reproduces its historical source ingestion failure in the legacy vector store (expected parity condition)
-- 6 agent manifests prepared for live creation
-- source-parity workflow manifest and YAML prepared
+- Phase 6 agent reconstruction: **COMPLETE** — six prompt agents live and enabled/active in nonprofit DEV (`SMID-RouterAgent` v2, `SMID-PassGuide` v1, `SMID-WorkshopGuide` v1, `SMID-SafetyAgent` v1, `OutOfScopeAgent` v1, `smid-compass-agent` v1)
+- Phase 7 workflow reconstruction: **COMPLETE** — `SMID-compass-workflow` live, enabled/active, routing verified to match source exactly
+- Phase 8 parity validation: **COMPLETE — PARITY SMOKE TEST PASSED** — see [docs/validation/phase-8-parity-validation.md](docs/validation/phase-8-parity-validation.md)
+- Phase 9 baseline freeze: **COMPLETE (documentation)** — nonprofit parity baseline validated; Git tag `nonprofit-parity-v1` to be created manually
 
-Current phase: **PHASE 6 — AGENT RECONSTRUCTION**
+## Migration status overview
+
+- Phase 0 — Source preservation: **COMPLETE**
+- Phase 1 — Target architecture: **COMPLETE**
+- Phase 2 — Nonprofit preflight: **COMPLETE**
+- Phase 3 — Terraform foundation: **COMPLETE**
+- Phase 4 — DEV infrastructure deployment: **COMPLETE**
+- Phase 5 — Knowledge reconstruction: **COMPLETE**
+- Phase 6 — Agent reconstruction: **COMPLETE**
+- Phase 7 — Workflow reconstruction: **COMPLETE**
+- Phase 8 — Parity validation: **COMPLETE / PARITY SMOKE TEST PASSED**
+- Phase 9 — Freeze nonprofit parity baseline: **COMPLETE**
+
+The migration-to-parity milestone is complete. The next technical work is **Modernization v2 — Microsoft Agent Framework migration in DEV** (Phase 11); it has not started. The validated parity baseline is the reference point for that work and must remain unmodified until modernization explicitly branches from it.
+
+Current phase: **Awaiting manual Git freeze (`nonprofit-parity-v1` tag); next engineering phase is Modernization v2**
 
 Strategy: migrate → validate parity → modernize
 
@@ -111,12 +128,32 @@ Phase 5 completed on **2026-11-06**. Live results:
 - current Foundry live behavior required Agent Service `file_id` attachments; Dataset `data_source` attachments were rejected on this deployment
 - the Embajada PDF required an ASCII-safe upload filename (`EmbajadaBerlin_ascii.pdf`) because the live Files API returned HTTP 500 for the original non-ASCII multipart filename; file content remained byte-identical
 
-Current technical objective:
-1. Execute Phase 6: create the six source-parity agents using the prepared manifests and the new target vector-store IDs.
-2. Restore the workflow in Phase 7.
-3. Run parity validation and freeze the validated nonprofit baseline as `nonprofit-parity-v1`.
+Phase 6 completed on **2026-11-13**. Live results:
+- all six agents created via `POST {PROJECT_ENDPOINT}/agents?api-version=v1`, no additional authentication/feature-flag/preview-header required
+- `SMID-RouterAgent`, `SMID-PassGuide`, `SMID-WorkshopGuide`, `SMID-SafetyAgent`, `OutOfScopeAgent`, `smid-compass-agent` all live, `enabled`/`active`
+- `SMID-RouterAgent` is at **target runtime version 2**, not 1 — a version-2 definition was created locally via `POST /agents/SMID-RouterAgent?api-version=v1` to correct a UTF-8 extraction defect in the initial version-1 instructions text (mojibake on non-ASCII arrow characters, introduced by local tooling, not by the API). Version 2 was verified field-for-field identical to the prepared manifest. This is a target-side runtime/versioning artifact only — it does not reflect, and is not expected to match, the source agent's version number (source `SMID-RouterAgent` was version 9). No source version numbers are reused or expected to match target version numbers for any of the six agents.
+- all intentional source asymmetries preserved exactly: `OutOfScopeAgent` has no RAI guardrail association; `SMID-SafetyAgent` has no `temperature`/`top_p`/`tool_choice`/`text` fields (absent, not defaulted by the platform)
+- no unexpected schema normalization observed on any agent
 
-No PROD deployment or Modernization v2 work should begin before parity validation is accepted.
+Phase 7 completed on **2026-11-13**. Live results:
+- `SMID-compass-workflow` created via the same `POST {PROJECT_ENDPOINT}/agents?api-version=v1` endpoint, using `kind: workflow` and the required preview header `Foundry-Features: WorkflowAgents=V1Preview` (value independently confirmed against the current Foundry TypeSpec, not assumed)
+- live identity: `SMID-compass-workflow:1`, version `1`, `enabled`/`active`, `draft: false`
+- the live `definition.workflow` string matched `target/migration/workflow/SMID-compass-workflow.yaml` exactly (byte-for-byte), and all five referenced agents (`SMID-RouterAgent` v2, `SMID-PassGuide` v1, `SMID-WorkshopGuide` v1, `SMID-SafetyAgent` v1, `OutOfScopeAgent` v1) resolved correctly
+- routing preserved exactly, including that `OutOfScopeAgent` bypasses `SMID-SafetyAgent`, and that `SMID-SafetyAgent` still receives answer-only input (the known `<route> | <answer>` mismatch), per the migrate-first/modernize-later strategy
+- no modernization performed; Microsoft Foundry declarative workflows are scheduled for retirement on 2026-12-01, but this does not invalidate the parity restoration — migration to Microsoft Agent Framework remains deferred to the later modernization phase, after the nonprofit parity baseline is validated
+
+Phase 8 completed on **2026-11-13**. A migration parity smoke validation — not exhaustive product QA — proving the nonprofit migration works end-to-end before modernization. Result: **PARITY SMOKE TEST PASSED**, all 6 tests passed (Passport/Workshop/Out-of-scope × Spanish/German). Full evidence: [docs/validation/phase-8-parity-validation.md](docs/validation/phase-8-parity-validation.md). Key verified facts:
+- Router classifies correctly in both Spanish and German.
+- Passport routes to `SMID-PassGuide`, Workshop routes to `SMID-WorkshopGuide`, both with successful File Search execution against their migrated vector stores.
+- `SMID-SafetyAgent` executes after the passport/workshop paths; `OutOfScopeAgent` bypasses it, exactly as in source.
+- The workflow reaches `End` successfully in all 6 cases, with no migrated-resource reference errors.
+- `SMID-PassGuide`/`SMID-WorkshopGuide`/`SMID-SafetyAgent` bilingual (ES+DE) responses and `OutOfScopeAgent`'s single-input-language responses both match their respective source instructions exactly.
+- Invocation mechanism: `POST openai/v1/conversations` then `POST openai/v1/responses` with `agent_reference: {type: "agent_reference", name: "SMID-compass-workflow"}` and header `Foundry-Features: WorkflowAgents=V1Preview`.
+- During Phase 8, the live workflow was observed at version 3 (Phase 7 had observed version 1); versions 2 and 3 contain comment-only differences, with the functional workflow YAML remaining equivalent to the validated parity definition. This is target-side versioning behavior with no functional parity impact; it was not modified or downgraded.
+
+Phase 9 completed (documentation) on **2026-11-13**: the source-parity migration is reconstructed, end-to-end parity smoke validation passed, validation evidence is stored in the repository, and this repository state represents the validated nonprofit parity baseline. The Git tag `nonprofit-parity-v1` marking this baseline is to be created manually (not created by this update).
+
+Current technical objective: begin **Modernization v2 — Microsoft Agent Framework migration in DEV** (not started yet). No PROD deployment beyond the Phase 10 pilot sequencing already defined, and no further parity migration work, is expected before that.
 
 See [docs/architecture/target-migration-architecture-v1.md](docs/architecture/target-migration-architecture-v1.md), [docs/plans/nonprofit-migration-plan-v1.md](docs/plans/nonprofit-migration-plan-v1.md), [target/migration/README.md](target/migration/README.md), and [docs/preflight/nonprofit-preflight.md](docs/preflight/nonprofit-preflight.md).
 
