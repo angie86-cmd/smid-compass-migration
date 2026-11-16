@@ -52,11 +52,9 @@ async def run_with_trace(message: str) -> dict:
             if executor_id is None:
                 continue
             data = getattr(event, "data", None)
-            data_preview = None
-            if isinstance(data, str):
-                data_preview = data
-            elif data is not None and event_type == "executor_invoked" and isinstance(data, type(None)):
-                data_preview = None
+            # Only string payloads (agent output text) are human-readable here;
+            # other event data is internal framework objects, not useful in a report.
+            data_preview = data if isinstance(data, str) else None
             trace.append({"executor_id": executor_id, "event_type": event_type, "data_preview": data_preview})
         final = await events.get_final_response()
         outputs = [str(o) for o in final.get_outputs()]

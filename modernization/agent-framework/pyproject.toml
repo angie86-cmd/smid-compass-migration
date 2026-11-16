@@ -9,5 +9,13 @@ dependencies = [
     "azure-identity>=1.27.0",
 ]
 
+[project.optional-dependencies]
+# Only needed for the (not-yet-deployed) Hosted Agent adapter (src/smid_compass/host.py).
+# agent-framework-foundry-hosting is currently prerelease (per Microsoft's own docs),
+# hence --pre and a separate extra rather than a hard dependency of local validation.
+hosting = [
+    "agent-framework-foundry-hosting",
+]
+
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -1,0 +1,15 @@
+# LOCAL TESTING ONLY — not part of the real Hosted Agent image (Dockerfile).
+# Adds Azure CLI so AzureCliCredential (the code's existing, unmodified
+# auth mechanism) can work inside the container by reusing the host's
+# `az login` session via a mounted ~/.azure. A real Hosted Agent deployment
+# would use the platform-issued managed identity instead, not this.
+FROM smid-compass-agent-framework:local-test
+RUN pip install --no-cache-dir azure-cli
+# azure-cli's own dependency pins downgrade azure-ai-projects below what
+# agent-framework-foundry needs (observed: azure-ai-projects 1.0.0, needs
+# >=2.2.0) — this conflict is itself evidence that az CLI and this app
+# should not share a Python environment in a real deployment (which is why
+# the real Dockerfile doesn't install az CLI at all; a deployed Hosted Agent
+# uses its platform-issued managed identity, not AzureCliCredential). Forcing
+# the version back here only unblocks THIS local diagnostic image.
+RUN pip install --no-cache-dir "azure-ai-projects>=2.3.0"

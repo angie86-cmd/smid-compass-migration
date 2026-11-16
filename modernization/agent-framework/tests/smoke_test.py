@@ -1,10 +1,13 @@
 """Phase-equivalent smoke test for the Agent Framework modernization of SMID
 Compass. Mirrors the first two tests from docs/validation/phase-8-parity-validation.md
-(Spanish and German passport routes). NOT yet run end-to-end: see the "Open
-decision" section in ../README.md (local .NET runtime required for the
-declarative Power Fx expression evaluator used by the reused workflow YAML).
+(Spanish and German passport routes). Both passed locally against the live
+Foundry agents on 2026-11-16, after installing a local .NET Runtime 10 for
+the declarative Power Fx expression evaluator (see ../README.md). The full
+6-test bilingual parity suite (this file's 2 tests plus workshop and
+out-of-scope, ES/DE) also passed — see ../validation/run_suite.py and
+../validation/agent-framework-smoke-validation.md for that complete evidence.
 
-Run manually once that decision is made:
+Run:
     PYTHONUTF8=1 PYTHONIOENCODING=utf-8 .venv/Scripts/python tests/smoke_test.py
 """
 
