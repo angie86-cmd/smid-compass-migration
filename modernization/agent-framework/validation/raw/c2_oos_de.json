@@ -1,0 +1,74 @@
+{
+  "message": "Wie ist das Wetter heute auf dem Mars?",
+  "trace": [
+    {
+      "executor_id": "_workflow_entry",
+      "event_type": "executor_invoked",
+      "data_preview": "Wie ist das Wetter heute auf dem Mars?"
+    },
+    {
+      "executor_id": "_workflow_entry",
+      "event_type": "executor_completed",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777738401900",
+      "event_type": "executor_invoked",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777738401900",
+      "event_type": "output",
+      "data_preview": "{\"route\":\"out_of_scope\",\"reason\":\"Request is unrelated to passport or workshop topics.\"}"
+    },
+    {
+      "executor_id": "node-1777738401900",
+      "event_type": "executor_completed",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777744701409_eval",
+      "event_type": "executor_invoked",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777744701409_eval",
+      "event_type": "executor_completed",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777753679454",
+      "event_type": "executor_invoked",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777753679454",
+      "event_type": "output",
+      "data_preview": "Es tut mir leid, ich kann dir aktuell nur bei venezolanischen Pass- und Identitätsthemen sowie bei SMID-Workshops helfen.  \nWenn du möchtest, unterstütze ich dich gerne bei einem dieser Themen."
+    },
+    {
+      "executor_id": "node-1777753679454",
+      "event_type": "executor_completed",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777755417417",
+      "event_type": "executor_invoked",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777755417417",
+      "event_type": "executor_completed",
+      "data_preview": null
+    }
+  ],
+  "node_sequence": [
+    "node-1777738401900",
+    "node-1777753679454"
+  ],
+  "outputs": [
+    "{\"route\":\"out_of_scope\",\"reason\":\"Request is unrelated to passport or workshop topics.\"}",
+    "Es tut mir leid, ich kann dir aktuell nur bei venezolanischen Pass- und Identitätsthemen sowie bei SMID-Workshops helfen.  \nWenn du möchtest, unterstütze ich dich gerne bei einem dieser Themen."
+  ],
+  "error": null
+}

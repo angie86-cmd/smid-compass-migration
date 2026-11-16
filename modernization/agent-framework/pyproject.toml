@@ -1,0 +1,13 @@
+[project]
+name = "smid-compass-agent-framework"
+version = "0.1.0"
+description = "Microsoft Agent Framework modernization of the SMID Compass orchestration (technical migration step, pre-behavior-modernization)"
+requires-python = ">=3.11,<3.15"
+dependencies = [
+    "agent-framework-foundry>=1.16.2",
+    "agent-framework-declarative>=1.5.1",
+    "azure-identity>=1.27.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,74 @@
+{
+  "message": "¿Cuál es la temperatura en Marte hoy?",
+  "trace": [
+    {
+      "executor_id": "_workflow_entry",
+      "event_type": "executor_invoked",
+      "data_preview": "¿Cuál es la temperatura en Marte hoy?"
+    },
+    {
+      "executor_id": "_workflow_entry",
+      "event_type": "executor_completed",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777738401900",
+      "event_type": "executor_invoked",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777738401900",
+      "event_type": "output",
+      "data_preview": "{\"route\":\"out_of_scope\",\"reason\":\"Request is unrelated to passport or workshop topics.\"}"
+    },
+    {
+      "executor_id": "node-1777738401900",
+      "event_type": "executor_completed",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777744701409_eval",
+      "event_type": "executor_invoked",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777744701409_eval",
+      "event_type": "executor_completed",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777753679454",
+      "event_type": "executor_invoked",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777753679454",
+      "event_type": "output",
+      "data_preview": "Lo siento, en este momento solo puedo ayudarte con trámites de pasaporte venezolano y talleres digitales SMID.  \nSi quieres, puedo orientarte en alguno de esos temas."
+    },
+    {
+      "executor_id": "node-1777753679454",
+      "event_type": "executor_completed",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777755417417",
+      "event_type": "executor_invoked",
+      "data_preview": null
+    },
+    {
+      "executor_id": "node-1777755417417",
+      "event_type": "executor_completed",
+      "data_preview": null
+    }
+  ],
+  "node_sequence": [
+    "node-1777738401900",
+    "node-1777753679454"
+  ],
+  "outputs": [
+    "{\"route\":\"out_of_scope\",\"reason\":\"Request is unrelated to passport or workshop topics.\"}",
+    "Lo siento, en este momento solo puedo ayudarte con trámites de pasaporte venezolano y talleres digitales SMID.  \nSi quieres, puedo orientarte en alguno de esos temas."
+  ],
+  "error": null
+}

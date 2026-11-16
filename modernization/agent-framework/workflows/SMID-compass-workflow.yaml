@@ -1,0 +1,85 @@
+# Target-side copy of source/workflows/SMID-compass-workflow.yaml, prepared for
+# the target Foundry tenant. NOT a modification of the source file (that file is
+# untouched); this is a reviewable copy of the exact string that will be placed
+# in the WorkflowAgentDefinition's `workflow` field at creation time.
+#
+# No content changes were needed: all InvokeAzureAgent nodes reference agents by
+# bare name (SMID-RouterAgent, SMID-PassGuide, SMID-WorkshopGuide, SMID-SafetyAgent,
+# OutOfScopeAgent), and the target agents are being created with those exact same
+# names (see target/migration/agents/), so the references resolve without edits.
+kind: workflow
+trigger:
+  kind: OnConversationStart
+  id: trigger_wf
+  actions:
+    - kind: InvokeAzureAgent
+      id: node-1777738401900
+      agent:
+        name: SMID-RouterAgent
+      conversationId: =System.ConversationId
+      input:
+        messages: =System.LastMessage.Text
+      output:
+        autoSend: true
+        responseObject: Local.router_json
+    - kind: ConditionGroup
+      conditions:
+        - condition: =Local.router_json.route = "passport"
+          actions:
+            - kind: InvokeAzureAgent
+              id: node-1777744904959
+              agent:
+                name: SMID-PassGuide
+              conversationId: =System.ConversationId
+              input:
+                messages: =System.LastMessage.Text
+              output:
+                autoSend: true
+                messages: Local.passport_answer
+                responseObject: Local.passport_json
+          id: if-node-1777744701409-hrg8v7hy
+        - condition: =Local.router_json.route = "workshop"
+          actions:
+            - kind: InvokeAzureAgent
+              id: node-1777753695596
+              agent:
+                name: SMID-WorkshopGuide
+              conversationId: =System.ConversationId
+              input:
+                messages: =System.LastMessage.Text
+              output:
+                autoSend: true
+                messages: Local.workshop_answer
+                responseObject: Local.workshop_json
+          id: if-node-1777744701409-o6fe6lp3
+      id: node-1777744701409
+      elseActions:
+        - kind: InvokeAzureAgent
+          id: node-1777753679454
+          agent:
+            name: OutOfScopeAgent
+          conversationId: =System.ConversationId
+          input:
+            messages: =System.LastMessage.Text
+          output:
+            autoSend: true
+            messages: Local.OutOfScope
+            responseObject: Local.outOfScope_json
+        - kind: EndConversation
+          id: node-1777755417417
+    - kind: InvokeAzureAgent
+      id: agent3
+      agent:
+        name: SMID-SafetyAgent
+      conversationId: =System.ConversationId
+      description: Third agent in sequential workflow
+      input:
+        messages: =Coalesce(Local.passport_answer, Local.workshop_answer)
+      output:
+        messages: Local.final_answer
+        autoSend: true
+    - kind: EndConversation
+      id: node-1777739592716
+id: ""
+name: SMID-compass-workflow
+description: ""
