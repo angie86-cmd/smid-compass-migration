@@ -4,17 +4,21 @@ version = "0.1.0"
 description = "Microsoft Agent Framework modernization of the SMID Compass orchestration (technical migration step, pre-behavior-modernization)"
 requires-python = ">=3.11,<3.15"
 dependencies = [
-    "agent-framework-foundry>=1.16.2",
-    "agent-framework-declarative>=1.5.1",
-    "azure-identity>=1.27.0",
+    # Exact pins, not >=: these are the versions actually validated together
+    # (6/6 parity suite + local container build, 2026-11-16/19). Bump deliberately,
+    # re-running the validation suite after, not automatically on every install.
+    "agent-framework-foundry==1.16.2",
+    "agent-framework-declarative==1.5.1",
+    "azure-identity==1.27.0",
 ]
 
 [project.optional-dependencies]
-# Only needed for the (not-yet-deployed) Hosted Agent adapter (src/smid_compass/host.py).
-# agent-framework-foundry-hosting is currently prerelease (per Microsoft's own docs),
-# hence --pre and a separate extra rather than a hard dependency of local validation.
+# Only needed for the Hosted Agent adapter (src/smid_compass/host.py) and its
+# container image. agent-framework-foundry-hosting is currently prerelease
+# (per Microsoft's own docs), hence --pre and a separate extra rather than a
+# hard dependency of the already-validated local workflow-execution path.
 hosting = [
-    "agent-framework-foundry-hosting",
+    "agent-framework-foundry-hosting==1.0.0b261112",
 ]
 
 [tool.setuptools.packages.find]

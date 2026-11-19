@@ -1,0 +1,32 @@
+# Pip constraints for transitive dependencies that are critical to this
+# project's behavior but not imported directly (so they don't belong in
+# pyproject.toml's own dependency list). A constraints file only pins a
+# version IF the package ends up being installed anyway via some other
+# dependency — it never forces a package to be installed, so this is safe
+# across platforms (e.g. it won't try to pull in Windows-only packages on
+# Linux). Use with: pip install -c constraints.txt ...
+#
+# Why these specific packages are pinned, not left to the resolver:
+# - azure-ai-projects: FoundryAgent's own API surface (e.g. MCPTool) has
+#   shifted across versions during this package's prerelease lifecycle;
+#   >=2.2.0 (the resolver's own floor) is not tight enough to guarantee the
+#   exact behavior already validated against the live agents.
+# - azure-ai-agentserver-core / -invocations / -responses: the Responses-
+#   protocol plumbing underneath agent-framework-foundry-hosting's
+#   ResponsesHostServer (src/smid_compass/host.py) — a prerelease surface,
+#   same reasoning as agent-framework-foundry-hosting itself.
+# - powerfx / pythonnet: the Power Fx/.NET bridge that makes the unmodified
+#   declarative workflow YAML runnable at all (see Dockerfile and README's
+#   "Resolved: local .NET runtime installed" section) — exact versions were
+#   validated together with .NET Runtime 10.0.15; this is the most
+#   behavior-sensitive part of the whole dependency graph.
+#
+# Validated together on 2026-11-16/19 (local Windows dev + Linux container
+# build, both against live nonprofit DEV Foundry agents).
+
+azure-ai-projects==2.11.0
+azure-ai-agentserver-core==2.3.1b1
+azure-ai-agentserver-invocations==1.3.0
+azure-ai-agentserver-responses==2.4.0
+powerfx==0.0.34
+pythonnet==3.0.5

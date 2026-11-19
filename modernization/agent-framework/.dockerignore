@@ -1,0 +1,52 @@
+# Build context hygiene for the Hosted Agent image. Keep this narrow: only
+# what the Dockerfile actually COPYs (pyproject.toml, constraints.txt, src/,
+# workflows/, scripts/) should ever reach the image; everything else here is
+# belt-and-suspenders in case the Dockerfile's COPY list changes later.
+
+.git/
+.gitignore
+
+# Local Python environment / caches — never ship a host-built venv or bytecode
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets / credentials — must never reach any image layer
+.env
+.env.*
+!.env.example
+*.pem
+*.pfx
+*.key
+*.p12
+*.cer
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.example.tfvars
+credentials.json
+secrets.*
+azureauth.json
+.azure/
+
+# Not needed inside the image (tests run locally/in CI, not shipped to prod)
+tests/
+validation/
+
+# Docs / local-only tooling not needed at runtime
+README.md
+Dockerfile.local-test
+
+# OS / editor / temp noise
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+.vscode/

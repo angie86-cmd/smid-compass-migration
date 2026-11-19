@@ -16,6 +16,9 @@ override.tf.json
 # Azure / secrets / credentials
 .env
 .env.*
+# Explicit, narrow exception: this one file is a template (variable NAMES and
+# safe example values only, no secrets) meant to be committed and shared.
+!modernization/agent-framework/.env.example
 *.pem
 *.pfx
 *.key

@@ -16,16 +16,18 @@
 
 FROM --platform=linux/amd64 python:3.13-slim-bookworm
 
-# .NET Runtime 10 (runtime only, no SDK) via Microsoft's official install
-# script, pinned to the same major version validated locally (10.0.15) on
-# 2026-11-16. ca-certificates/curl for the script itself; libicu/libssl are
-# CoreCLR's own runtime dependencies on Debian.
+# .NET Runtime (runtime only, no SDK) via Microsoft's official install script,
+# pinned to the EXACT version validated locally (--version, not --channel —
+# --channel tracks the latest patch in a release train and can silently drift
+# to a newer .NET than what was actually tested). ca-certificates/curl for the
+# script itself; libicu/libssl are CoreCLR's own runtime dependencies on Debian.
+ARG DOTNET_RUNTIME_VERSION=10.0.15
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates curl libicu72 libssl3 \
     && rm -rf /var/lib/apt/lists/* \
     && curl -sSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh \
     && chmod +x /tmp/dotnet-install.sh \
-    && /tmp/dotnet-install.sh --channel 10.0 --runtime dotnet --install-dir /usr/share/dotnet \
+    && /tmp/dotnet-install.sh --version ${DOTNET_RUNTIME_VERSION} --runtime dotnet --install-dir /usr/share/dotnet \
     && rm /tmp/dotnet-install.sh
 
 ENV DOTNET_ROOT=/usr/share/dotnet \
@@ -36,13 +38,21 @@ ENV DOTNET_ROOT=/usr/share/dotnet \
 
 WORKDIR /app
 
-COPY pyproject.toml ./
+COPY pyproject.toml constraints.txt ./
 COPY src/ src/
 COPY workflows/ workflows/
+COPY scripts/ scripts/
 
 # --pre: agent-framework-foundry-hosting is currently prerelease (Microsoft's
 # own docs state this), so the "hosting" extra needs it for this whole install.
-RUN pip install --no-cache-dir --pre -e ".[hosting]"
+# -c constraints.txt: pins the behavior-critical transitive packages (see
+# constraints.txt for why) without hand-declaring them as direct dependencies.
+RUN pip install --no-cache-dir --pre -c constraints.txt -e ".[hosting]"
+
+# Build-time validation: fail the build (not a later deploy) if the exact
+# .NET version, Python version, Power Fx/CoreCLR loading, or the unmodified
+# workflow YAML's structure don't match what was actually validated.
+RUN python scripts/validate_runtime.py
 
 EXPOSE 8088
 

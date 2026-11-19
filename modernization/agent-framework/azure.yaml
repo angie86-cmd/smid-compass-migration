@@ -1,0 +1,58 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+#
+# NOT YET DEPLOYED. Prepared per the 2026-11-19 instruction to have validated
+# deployment configuration ready, without deploying. Schema confirmed against
+# Microsoft's own official sample (Azure-Samples/microsoft-foundry-hosted-agents,
+# 41-Foundry-Agent-CPP-Hosted/azure.yaml), which is the only real example found
+# of the `language: docker` / `docker:` container-deployment path (the C#/Go
+# samples use `codeConfiguration` instead, which doesn't apply to us — see
+# README.md's Hosted Agent deployment readiness section for why we need the
+# container path, not source/code deployment).
+#
+# `foundry-project.endpoint` points at the EXISTING project directly — this is
+# how an existing project is targeted rather than one azd would provision.
+# No new project, no new model deployment is declared here.
+
+requiredVersions:
+  azd: ">=1.37.0"
+  extensions:
+    azure.ai.agents: ">=1.0.0-beta.8"
+    azure.ai.projects: ">=1.0.0-beta.4"
+
+name: smid-compass-agent-framework
+services:
+  foundry-project:
+    host: azure.ai.project
+    # Existing nonprofit DEV project — not created or recreated by this file.
+    # Subscription a5bc333b-cd24-4c66-95e0-18013949c94f, resource group
+    # rg-smid-compass-dev, Foundry account smid-compass-dev-a5bc33, region
+    # swedencentral (officially supported for Hosted Agents, confirmed against
+    # https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/hosted-agents).
+    endpoint: https://smid-compass-dev-a5bc33.services.ai.azure.com/api/projects/smid-compass
+  smid-compass-agent-framework:
+    project: .
+    host: azure.ai.agent
+    language: docker
+    docker:
+      path: ./Dockerfile
+      context: .
+      remoteBuild: true
+    uses:
+      - foundry-project
+    env:
+      # The only variable this code reads (see src/smid_compass/config.py).
+      # No model-deployment name is declared: the orchestration invokes the
+      # existing live agents (which already use the existing gpt-4.1-mini
+      # deployment), it does not call a model directly.
+      FOUNDRY_PROJECT_ENDPOINT: ${FOUNDRY_PROJECT_ENDPOINT}
+    container:
+      resources:
+        cpu: "0.5"
+        memory: 1Gi
+    kind: hosted
+    name: smid-compass-agent-framework
+    protocols:
+      - protocol: responses
+        version: 2.0.0
+infra:
+  provider: microsoft.foundry

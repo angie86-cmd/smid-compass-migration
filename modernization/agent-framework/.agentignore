@@ -1,0 +1,13 @@
+# azd/Foundry packaging ignore, mirroring Microsoft's own sample
+# (Azure-Samples/microsoft-foundry-hosted-agents). Keep narrow and aligned
+# with .dockerignore — this controls what azd considers part of the agent
+# package, not what the Dockerfile COPYs.
+.azure/
+.git/
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.pyc
