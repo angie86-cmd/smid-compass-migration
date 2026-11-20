@@ -13,8 +13,15 @@
 # Platform: linux/amd64 (x86_64), matching Foundry Hosted Agent container
 # sandboxes. Build explicitly for that platform from Windows/ARM hosts:
 #   docker build --platform linux/amd64 -t smid-compass-agent-framework .
+#
+# No `--platform=` on the FROM line itself: ACR Tasks' remote-build dependency
+# scanner (used by `azd deploy` with `docker: {remoteBuild: true}`) uses a
+# lightweight Dockerfile parser that does not understand `FROM --platform=...`
+# and aborts the build before it starts. ACR Tasks' build agents are amd64
+# Linux only, so the image's architecture is unaffected; local builds still
+# get linux/amd64 via the explicit `docker build --platform` flag above.
 
-FROM --platform=linux/amd64 python:3.13-slim-bookworm
+FROM python:3.13-slim-bookworm
 
 # .NET Runtime (runtime only, no SDK) via Microsoft's official install script,
 # pinned to the EXACT version validated locally (--version, not --channel —

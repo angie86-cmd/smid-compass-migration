@@ -8,12 +8,12 @@ Local execution against live Foundry agents: PASS
 Parity smoke validation:                     6/6 PASS
 Hosted Agent adapter (host.py) local test:   PASS (full /responses round trip, 2026-11-19)
 Azure DEV pre-deployment prep (ACR, RBAC):    DONE (2026-11-19) — see below
-Hosted Agent deployment to Azure DEV:         PENDING (deliberately not done — needs your authorization)
-Post-deployment DEV validation:               PENDING
+Hosted Agent deployment to Azure DEV:         DEPLOYED and ACTIVE (2026-11-20) — see below
+Post-deployment DEV validation:               PASS — passport, workshop, out-of-scope all routed and answered correctly, no errors (2026-11-20)
 Production deployment:                        NOT STARTED / NOT TOUCHED
 ```
 
-The Agent Framework migration has been proven **locally, including the full Hosted Agent adapter path** (not just the plain workflow) — a local container now runs the real `ResponsesHostServer` and completes an authenticated end-to-end request against the live Foundry agents. The repository, image, and Azure DEV prerequisites (registry, RBAC) are now prepared and validated. **The Hosted Agent itself has not been deployed** — that single remaining step needs your explicit authorization. See [Next session — Hosted Agent deployment](#next-session--hosted-agent-deployment) below.
+The Agent Framework migration is now **deployed and validated in Azure DEV as a real Foundry Hosted Agent** (`smid-compass-agent-framework:1`, status `active`), not just locally. It reuses the existing live Foundry agents, the existing `smid-compass` project, and the existing ACR — no new project, model, or region. Three real queries (passport, workshop, out-of-scope) were run against the deployed agent and all routed and answered correctly with no errors. See [Hosted Agent deployment readiness](#hosted-agent-deployment-readiness-updated-2026-11-19--azure-dev-prep-done-container-validated-end-to-end-locally-hosted-agent-itself-still-not-deployed) below for the full deployment record, including two real deployment-time issues found and fixed.
 
 This is the first Modernization v2 step: a *technical* migration of the orchestration layer from Foundry's declarative `kind: workflow` resource to Microsoft Agent Framework, with **no behavior changes**. It reuses the existing, live, validated nonprofit DEV Foundry agents (`SMID-RouterAgent`, `SMID-PassGuide`, `SMID-WorkshopGuide`, `SMID-SafetyAgent`, `OutOfScopeAgent`) by name/version — it does not recreate their prompts, tools, File Search, vector stores, or guardrails. **The existing, validated Foundry declarative workflow (`SMID-compass-workflow`, live in nonprofit DEV) has not been deleted or modified, and remains the behavioral reference/fallback until a Hosted Agent deployment of this implementation is itself deployed and validated in DEV** — see [Keeping the declarative workflow as fallback](#keeping-the-declarative-workflow-as-fallback).
 
@@ -157,35 +157,50 @@ None of these were installed or configured in this task (out of scope — Step 8
 | **Azure Container Registry** | **✅ Created, 2026-11-19** | `smidcompassdeva5bc33` (Basic SKU, Sweden Central, admin user disabled), `smidcompassdeva5bc33.azurecr.io`. Confirmed via `az acr list` that none existed beforehand (not part of the Terraform foundation). Not linked into `azure.yaml` yet — the next session needs to confirm whether `azd provision` auto-discovers it or expects it referenced explicitly. |
 | **RBAC: Foundry Project Manager** | **✅ Assigned, 2026-11-19** | `cloud_smid@savemyidentityorg.onmicrosoft.com`, scoped to the `smid-compass` project only (confirmed missing beforehand via `az role assignment list` — only "Foundry User" existed, at the account scope). |
 | **RBAC: AcrPush** | **✅ Assigned, 2026-11-19** | Same account, scoped to the new ACR resource only (not the resource group). |
-| **Hosted Agent resource itself** | **Not created** | The actual hosted-agent entity within the existing project — this is the thing still awaiting your authorization to deploy. |
-| **Dedicated Entra agent identity** | **Not created yet** | Microsoft's docs state the platform creates one per hosted agent at deploy time — doesn't exist until that happens, so nothing to scope a role to yet (see point 5). |
+| **Foundry project connection** | **✅ Created, 2026-11-20** | `smidcompassdeva5bc33-conn` (kind `ContainerRegistry`, auth `ManagedIdentity`) — links the existing project to the existing ACR for remote builds. Created via `azd provision`, previewed first and matched the preview exactly. |
+| **Hosted Agent resource itself** | **✅ Deployed and active, 2026-11-20** | `smid-compass-agent-framework:1`, status `active`. Validated with real passport/workshop/out-of-scope queries (see above). |
+| **Dedicated Entra agent identity** | **✅ Created automatically at deploy time, 2026-11-20** | Platform-issued, as Microsoft's docs described in advance — `azd ai agent show` reports `Instance Identity Principal ID 1d5032d0-75a6-4dc7-aca5-a7adad355d51`. No role was assigned to it manually; image pulls worked without one, consistent with the earlier prediction that the tooling handles this automatically. |
 | Application Insights | **Reused** | Already provisioned by Terraform for `smid-compass-dev`; container deployments get an auto-injected connection string, no new resource expected. |
 | **Credential mechanism for the deployed container** | **✅ Fixed, 2026-11-19** | `agents.py` now uses `DefaultAzureCredential` (see "What was verified" / Setup above) instead of a hardcoded `AzureCliCredential` — works locally via your `az login` session today, and will resolve via the Hosted Agent's managed identity once deployed, with no further code change needed. |
 
 **8. Cost — I could not get verified rate numbers, and won't invent any.** Azure's public Foundry Agent Service pricing pages list Hosted Agent compute as billed per **vCPU-hour + GiB-hour** of the sandbox size used (`azure.yaml` currently requests the smallest tier, 0.5 vCPU/1 GiB), separate from model-token costs (already being incurred today regardless, via the existing agents) — but the actual rate figures on Microsoft's pricing pages were blank placeholders in what I could fetch. The Basic-SKU ACR actually created above is a well-documented, low, roughly-$5/month-class cost, but I'm not treating that as precise either. **Recommend checking the Azure Pricing Calculator directly, or your Azure sales/billing contact, for real numbers before deciding on the Hosted Agent itself.**
 
-**What was actually created/changed in Azure DEV this session:** one Basic-SKU Container Registry, and two narrowly-scoped RBAC role assignments (both listed above). **The Hosted Agent itself was NOT deployed, no `azd provision`/`azd up`/`azd deploy` was run against Azure, and no container image was pushed anywhere.** Per this task's boundaries, that final step is explicitly out of scope until you authorize it. See [Next session — Hosted Agent deployment](#next-session--hosted-agent-deployment) for the concrete checklist.
+**What was actually created/changed in Azure DEV through 2026-11-19:** one Basic-SKU Container Registry, and two narrowly-scoped RBAC role assignments (both listed above). The Hosted Agent itself was not yet deployed as of that point.
+
+## 2026-11-20 — Hosted Agent deployed and validated in Azure DEV
+
+With explicit authorization, the Hosted Agent was actually deployed. What was done, in order:
+
+1. **`azd env new smid-compass`** — created the azd environment (subscription `a5bc333b-cd24-4c66-95e0-18013949c94f`, region `swedencentral`).
+2. **Authentication**: `azd auth login` (device code) — required interactively; the automated session's non-interactive stdin couldn't complete a device-code flow, so this one step needed to be run by hand in a real terminal.
+3. **`azd env set`**: `FOUNDRY_PROJECT_ENDPOINT`, `AZURE_CONTAINER_REGISTRY_ENDPOINT` (`smidcompassdeva5bc33.azurecr.io`), `AZURE_CONTAINER_REGISTRY_RESOURCE_ID`, `AZURE_AI_PROJECT_ID` — all local to the azd environment (`.azure/`, git-ignored), none of these are secrets.
+4. **`azd provision --preview`**, checked before applying: the only planned change was `Create: Foundry project connection: smidcompassdeva5bc33-conn` — no new project, ACR, or model. Confirmed, then applied for real with `azd provision`.
+5. **`azd deploy --all`** — found and fixed two real, narrow deployment-blocking issues (not architecture/security changes):
+   - **ACR Tasks remote-build failure**: `docker: {remoteBuild: true}` builds run through Azure Container Registry Tasks, whose lightweight Dockerfile parser (used for its own dependency-scanning pre-step) does not understand `FROM --platform=linux/amd64 ...` and aborted the build before it started. Fixed by dropping the `--platform=` argument from the `Dockerfile`'s `FROM` line — ACR Tasks' build agents are amd64 Linux only, so the resulting image's architecture is unaffected; local builds still get `linux/amd64` via the existing `docker build --platform linux/amd64` instruction in the same comment block.
+   - **Reserved environment variable rejected by the Foundry API**: the hosted-agent creation call returned `400 invalid_payload`: *"Environment variable 'FOUNDRY_PROJECT_ENDPOINT' is reserved for platform use. All FOUNDRY_* and AGENT_* variables are reserved per container-image-spec."* Fixed by removing the `env:` block from `azure.yaml`'s `smid-compass-agent-framework` service — the platform injects this variable itself at runtime, and `config.py`'s existing fallback default already matches this project's own endpoint, so no code change was needed.
+   - After both fixes, `azd deploy --all` completed successfully in ~2m20s: image built and pushed via ACR Tasks, hosted agent version `1` created and activated.
+6. **Verification**, all against the real deployed agent (not local):
+   - `azd ai agent show smid-compass-agent-framework` → `Status: active`, `Version: 1`.
+   - Passport query (Spanish) → `route: passport`, full bilingual PassGuide+Safety answer, no errors.
+   - Workshop query (Spanish) → `route: workshop`, full bilingual WorkshopGuide+Safety answer, no errors.
+   - Out-of-scope query (Spanish) → `route: out_of_scope`, canned redirect answer, Safety correctly bypassed, no errors.
+   - No separate public `/readiness` HTTP path exists for a deployed Hosted Agent (that path was specific to the local Docker test) — the platform's own `active` status is itself the result of its internal readiness probing during deploy (visible in the deploy log as "Polling agent status").
+
+**Not done, per explicit instruction:** production was not touched; the agent was not published to any external channel; the prior declarative Foundry workflow was not deleted or modified.
 
 ## Keeping the declarative workflow as fallback
 
 The existing, validated Foundry declarative workflow (`SMID-compass-workflow`, live in nonprofit DEV, validated in Phase 8) has **not** been deleted, modified, or touched by this modernization work, and is not planned to be. It remains available as the behavioral reference and operational fallback until a Hosted Agent deployment of this Agent Framework implementation is itself deployed to Azure DEV and independently validated there. This matters especially because Microsoft is retiring declarative Foundry workflows on **2026-12-01** — until the Hosted Agent path is proven in DEV, the declarative workflow is still the only *deployed* working implementation, and should not be removed or altered as part of this work.
 
-## Next session — Hosted Agent deployment
+## Next session — beyond DEV smoke validation
 
-**Do not rebuild the migration from scratch.** The working implementation already lives in `modernization/agent-framework/`, and its validation evidence is already in `modernization/agent-framework/validation/`. The next session should continue from this state, starting with:
+**Do not rebuild the migration from scratch.** The Hosted Agent is deployed and active in Azure DEV (`smid-compass-agent-framework:1`). What's actually left:
 
-**Already done, as of 2026-11-19 — do not redo:** `azd` and the Foundry extensions installed; `agents.py` uses `DefaultAzureCredential`; the three real `host.py` bugs are fixed and a full local `/responses` round trip passed; the Dockerfile pins exact `.NET 10.0.15` with build-time validation; `pyproject.toml`/`constraints.txt` pin exact dependency versions; `azure.yaml` exists and is `azd show`-validated; the ACR and both RBAC role assignments exist in Azure DEV (see point 7 above).
-
-What's actually left:
-
-1. Re-check current Microsoft Hosted Agent documentation once more immediately before deploying (it moves fast).
-2. Decide whether `azure.yaml` needs the existing ACR (`smidcompassdeva5bc33.azurecr.io`) referenced explicitly, or whether `azd provision` auto-discovers/reuses it — not resolved this session.
-3. Build and push the image (`Dockerfile` in this directory — not `Dockerfile.local-test`, which is diagnostic-only) via `azd deploy` or `docker push`, using the already-granted `AcrPush` role.
-4. Run `azd ai agent init --project-id "<smid-compass project resource ID>" --deploy-mode container` (or confirm `azure.yaml` alone is sufficient), then `azd provision`/`azd deploy`.
-5. Deploy to **DEV only**, once explicitly authorized — this step specifically, not the prep work above, is what still needs your go-ahead.
-6. Run the same six parity smoke tests (`validation/run_suite.py`) against the deployed Hosted Agent — this time credential-complete for real (a working IMDS endpoint), unlike the local container test in point 3 above.
-7. Compare results against both Phase 8 (original Foundry workflow) and this local Agent Framework validation (`validation/agent-framework-smoke-validation.md`).
-8. Document Hosted Agent DEV validation before any production decision — production remains untouched until then.
+1. Run the full six-case bilingual parity suite (`validation/run_suite.py`) against the deployed Hosted Agent endpoint, not just the three ad-hoc queries done at deploy time, and save that evidence under `validation/`.
+2. Compare results against both Phase 8 (original Foundry workflow) and the local Agent Framework validation (`validation/agent-framework-smoke-validation.md`).
+3. Decide on an evaluation suite (`azd extension install azure.ai.evaluations`, `azd ai eval init`) if ongoing quality monitoring in DEV is wanted — not set up yet.
+4. Get real Hosted Agent pricing figures before any production decision (see point 8 above — still unresolved).
+5. Document Hosted Agent DEV validation outcome before any production decision — production remains untouched until then.
 
 ## Current modernization status
 
@@ -193,12 +208,12 @@ What's actually left:
 - Existing live Foundry agents reused successfully (not recreated)
 - Existing workflow semantics preserved (byte-identical YAML, zero redesign)
 - Local runtime validation: **PASS**
-- 6-test parity suite: **6/6 PASS**
+- 6-test local parity suite: **6/6 PASS**
 - Hosted Agent adapter (`host.py`) local round trip: **PASS** (2026-11-19)
 - Azure DEV pre-deployment prep (ACR, RBAC, `azd`, `azure.yaml`): **DONE** (2026-11-19)
-- Hosted Agent deployment: **PENDING — awaiting your authorization**
-- Azure DEV Hosted Agent validation: **PENDING**
+- Hosted Agent deployment to Azure DEV: **DONE — deployed and active** (2026-11-20)
+- Azure DEV Hosted Agent validation: **PASS — passport, workshop, out-of-scope all correct, no errors** (2026-11-20)
 - Production: **UNTOUCHED**
-- Next major task: Hosted Agent deployment into DEV and post-deployment validation
+- Next major task: full six-case parity suite against the deployed Hosted Agent, then a production-readiness decision
 
-This is a **technical parity smoke validation**, not exhaustive QA, and not yet a production-ready or fully-Azure-deployed migration. See [validation/agent-framework-smoke-validation.md](validation/agent-framework-smoke-validation.md) for the documented scope and limitations (no detailed File Search call trace at this layer, no independent RAI re-verification, no multi-turn/malformed-route testing, no Hosted Agent deployment, no production traffic).
+This is a **technical parity smoke validation**, not exhaustive QA. See [validation/agent-framework-smoke-validation.md](validation/agent-framework-smoke-validation.md) for the documented scope and limitations (no detailed File Search call trace at this layer, no independent RAI re-verification, no multi-turn/malformed-route testing, no production traffic). The Hosted Agent deployment itself has now been validated with three real queries against the live DEV endpoint (see above), beyond what that document covers.

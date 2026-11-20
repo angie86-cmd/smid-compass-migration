@@ -39,12 +39,15 @@ services:
       remoteBuild: true
     uses:
       - foundry-project
-    env:
-      # The only variable this code reads (see src/smid_compass/config.py).
-      # No model-deployment name is declared: the orchestration invokes the
-      # existing live agents (which already use the existing gpt-4.1-mini
-      # deployment), it does not call a model directly.
-      FOUNDRY_PROJECT_ENDPOINT: ${FOUNDRY_PROJECT_ENDPOINT}
+    # No env block: FOUNDRY_PROJECT_ENDPOINT (the only variable this code
+    # reads, see src/smid_compass/config.py) is reserved for platform use —
+    # Foundry's hosted-agent API rejects any user-declared FOUNDRY_*/AGENT_*
+    # variable (confirmed via a real 400 invalid_payload response on deploy,
+    # 2026-11-20) and injects it itself at runtime with this project's own
+    # endpoint, which config.py's own fallback default already matches.
+    # No model-deployment name is declared: the orchestration invokes the
+    # existing live agents (which already use the existing gpt-4.1-mini
+    # deployment), it does not call a model directly.
     container:
       resources:
         cpu: "0.5"
