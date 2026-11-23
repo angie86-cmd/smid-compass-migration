@@ -70,11 +70,34 @@ async def parse_response(request: HostedResponseRequest) -> WorkflowTurn:
     return WorkflowTurn(input=await request.get_input_text())
 
 
+def discard_caller_model_options(request: HostedResponseRequest, options: dict) -> dict:
+    """Strip any caller-supplied model options (temperature, tool_choice,
+    parallel_tool_calls, etc.) before they reach the native-workflow agents.
+
+    Root cause (confirmed via `agent_framework_foundry_hosting._workflow_source
+    .prepare_workflow_kwargs`, 2026-11-23): any request field not in that
+    package's small "host-controlled" set (which does include `store` itself)
+    is folded into `request.options` as a model-generation override, then
+    required to exactly match each native RawAgent's own `default_options`.
+    Our FoundryAgent instances (agents.py) only set `default_options={"store":
+    False}` — so any extra option the caller sends (the Foundry web Playground
+    sends some by default; a plain CLI/VS Code invoke does not) fails with
+    "RawAgent workflow generation overrides must be materialized in the fresh
+    factory defaults." Each sub-agent's real generation settings are already
+    configured server-side on the live Foundry PromptAgent itself, not
+    controlled by this orchestration layer, so discarding caller overrides
+    here doesn't change any agent's behavior — it only stops an unrelated
+    caller default from being compared against our minimal `default_options`.
+    """
+    return {}
+
+
 def main() -> None:
     server = ResponsesHostServer(
         workflow=build_workflow,
         parse_response=parse_response,
         checkpoint_store_provider=CheckpointStoreProvider(allowed_checkpoint_types=_DECLARATIVE_CHECKPOINT_TYPES),
+        prepare_options=discard_caller_model_options,
     )
     server.run()
 
