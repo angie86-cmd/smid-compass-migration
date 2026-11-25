@@ -100,3 +100,27 @@ scoped continuation, or start a fresh workflow lineage.
 **Corrección:** en `src/smid_compass/host.py`, función `discard_caller_model_options` registrada como el hook `prepare_options` de `ResponsesHostServer`, que descarta las opciones de modelo del llamador antes de que lleguen a esa comparación. Seguro porque el comportamiento real de cada agente ya está configurado del lado de Foundry en cada PromptAgent existente — esta capa de orquestación no los controla. No se tocó el YAML del workflow ni los agentes.
 
 **Validado antes de desplegar:** suite de 6 casos (6/6 PASS, sin regresión) y prueba local directa simulando exactamente el request del Playground (`store: true` + `parallel_tool_calls`, `temperature`, `tool_choice`) — respuesta completa y correcta.
+
+## English — DEV user testing
+
+The CLI runner covers six bilingual routing cases. The Foundry Playground checks the actual user experience. Use a new conversation for each case except D1 and D2. Record the host version, date, observations and outcome.
+
+| ID | Prompt or action | Expected outcome | Recorded status |
+| --- | --- | --- | --- |
+| A1 | `como hago para sacar el pasaporte?` | Passport route and guidance including SAIME and the biometric appointment. | PASS, 2026-11-23, version 5 |
+| A2 | `Perdi mi pasaporte en Alemania, que hago?` | Passport route and guidance about reporting the loss to police and applying for a replacement. | Pending |
+| A3 | `Wie kann ich einen Reisepass beantragen?` | Passport route and answer in German. | Pending |
+| B1 | `Quiero inscribirme en un taller de integracion laboral` | Workshop route, registration link and cost. | Pending |
+| B2 | `Wie kann ich mich für einen Workshop anmelden?` | Workshop route and answer in German. | Pending |
+| C1 | `Cual es la capital de Francia?` | Out-of-scope redirect. | Pending |
+| C2 | `Was ist die Hauptstadt von Frankreich?` | Out-of-scope redirect in German. | Pending |
+| D1 | Ask A1, then `Y si tambien perdi mi cedula?` in the same conversation. | Retains the passport context. | Pending |
+| D2 | Ask C1, then `y la de Alemania?` in the same conversation. | Remains out of scope or redirects appropriately without an error. | Pending |
+| E1 | Empty or whitespace-only input. | Handles input gracefully, for example by asking for clarification. Record if the client prevents submission. | Pending |
+| E2 | A long, multiline message combining passport and workshop topics. | Routes to a supported topic without an error. | Pending |
+
+The six ES/DE CLI cases previously passed. Version 5 was confirmed in Foundry Playground, CLI and VS Code. The remaining manual cases are pending.
+
+### Resolved Playground issue
+
+On November 23, new Playground requests failed with `Native workflow input validation failed` while CLI and VS Code calls worked. The underlying adapter required caller model options to match workflow agent defaults. Playground requests included temperature and tool options, while internal agents declared only `store: False`. The `prepare_options` hook in the host discards caller model overrides, and the live PromptAgents retain their server-side settings. The fix was verified with the six CLI cases and a local Playground-shaped request and was confirmed in Hosted Agent version 5.
