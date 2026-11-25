@@ -36,7 +36,7 @@ Repetir cada pregunta tal cual, en una **conversación nueva** salvo que se indi
 
 ### E. Casos límite
 
-- [ ] **E1.** Mensaje vacío o solo espacios — confirmar que no rompe el agente (puede responder pidiendo aclaración).
+- [x] **E1.** Mensaje vacío o solo espacios — confirmar que no rompe el agente (puede responder pidiendo aclaración). **Resultado (CLI, 2026-11-25, versión 5):** cadena vacía `""` → la propia CLI (`azd ai agent invoke`) la rechaza antes de enviarla (`ERROR: a message argument or --input-file is required`, exit 1) — **BLOCKED**, ninguna petición llega al servicio. Cadena de solo espacios `"   "` → sí llega al servicio, rutea a `out_of_scope` con razón explícita `"User input is empty or unclear, no specific request identified."`, responde con el mensaje estándar, sin error — **PASS**. Consulta de control (`como hago para sacar el pasaporte?`) confirmó que el agente está accesible — **PASS**. Pendiente repetir ambas entradas manualmente en el Playground web.
 - [ ] **E2.** Mensaje muy largo (varias líneas, mezcla de los dos temas) — confirmar que enruta a uno de los dos temas válidos sin error.
 
 ## Validación automática (CLI) — referencia
@@ -116,7 +116,7 @@ The CLI runner covers six bilingual routing cases. The Foundry Playground checks
 | C2 | `Was ist die Hauptstadt von Frankreich?` | Out-of-scope redirect in German. | Pending |
 | D1 | Ask A1, then `Y si tambien perdi mi cedula?` in the same conversation. | Retains the passport context. | Pending |
 | D2 | Ask C1, then `y la de Alemania?` in the same conversation. | Remains out of scope or redirects appropriately without an error. | Pending |
-| E1 | Empty or whitespace-only input. | Handles input gracefully, for example by asking for clarification. Record if the client prevents submission. | Pending |
+| E1 | Empty or whitespace-only input. | Handles input gracefully, for example by asking for clarification. Record if the client prevents submission. | CLI, 2026-11-25, version 5: empty string "" is rejected by the `azd` CLI itself before any request is sent (`a message argument or --input-file is required`, exit 1) — BLOCKED. Whitespace-only "   " reaches the service and routes to `out_of_scope` with an explicit "input is empty or unclear" reason, no error — PASS. Control query confirmed the agent is reachable. Manual Playground run still pending. |
 | E2 | A long, multiline message combining passport and workshop topics. | Routes to a supported topic without an error. | Pending |
 
 The six ES/DE CLI cases previously passed. Version 5 was confirmed in Foundry Playground, CLI and VS Code. The remaining manual cases are pending.
