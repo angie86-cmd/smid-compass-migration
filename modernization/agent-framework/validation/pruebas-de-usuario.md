@@ -16,28 +16,29 @@ Repetir cada pregunta tal cual, en una **conversación nueva** salvo que se indi
 ### A. Pasaporte
 
 - [x] **A1.** `como hago para sacar el pasaporte?` — Debe enrutar a `passport`, responder con guía completa (SAIME, cita biométrica, etc.). **Resultado: ✅ PASS (2026-11-23, versión 5)**
-- [ ] **A2.** `Perdi mi pasaporte en Alemania, que hago?` — Debe enrutar a `passport`, mencionar denuncia policial + trámite de reposición.
-- [ ] **A3.** `Wie kann ich einen Reisepass beantragen?` (alemán) — Debe enrutar a `passport` y responder en alemán.
+- [x] **A2.** `Perdi mi pasaporte en Alemania, que hago?` — Debe enrutar a `passport`, mencionar denuncia policial + trámite de reposición. **Resultado: ✅ PASS (2026-11-25, versión 5)**
+- [x] **A3.** `Wie kann ich einen Reisepass beantragen?` (alemán) — Debe enrutar a `passport` y responder en alemán. **Resultado: ✅ PASS (2026-11-25, versión 5)**
 
 ### B. Taller / Workshop
 
-- [ ] **B1.** `Quiero inscribirme en un taller de integracion laboral` — Debe enrutar a `workshop`, mencionar el enlace de inscripción y el costo.
-- [ ] **B2.** `Wie kann ich mich für einen Workshop anmelden?` (alemán) — Debe enrutar a `workshop` y responder en alemán.
+- [x] **B1.** `Quiero inscribirme en un taller de integracion laboral` — Debe enrutar a `workshop`, mencionar el enlace de inscripción y el costo.  **Resultado: ✅ PASS (2026-11-25, versión 5)**
+- [x] **B2.** `Wie kann ich mich für einen Workshop anmelden?` (alemán) — Debe enrutar a `workshop` y responder en alemán. **Resultado: ✅ PASS (2026-11-25, versión 5)**
 
 ### C. Fuera de alcance
 
-- [ ] **C1.** `Cual es la capital de Francia?` — Debe enrutar a `out_of_scope`, responder con el mensaje de redirección, sin pasar por Safety.
-- [ ] **C2.** `Was ist die Hauptstadt von Frankreich?` (alemán) — Debe enrutar a `out_of_scope` igual que C1.
+- [x] **C1.** `Cual es la capital de Francia?` — Debe enrutar a `out_of_scope`, responder con el mensaje de redirección, sin pasar por Safety.**Resultado: ✅ PASS (2026-11-25, versión 5)**
+- [x] **C2.** `Was ist die Hauptstadt von Frankreich?` (alemán) — Debe enrutar a `out_of_scope` igual que C1. **Resultado: ✅ PASS (2026-11-25, versión 5)**
 
 ### D. Continuación de conversación (mismo chat, sin recargar)
 
-- [ ] **D1.** Primero preguntar A1, luego en el mismo chat: `Y si tambien perdi mi cedula?` — Debe responder manteniendo el contexto de pasaporte.
-- [ ] **D2.** Primero preguntar C1, luego en el mismo chat: `y la de Alemania?` — Debe seguir fuera de alcance o reencauzar correctamente, sin error.
+- [x] **D1.** Primero preguntar A1, luego en el mismo chat: `Y si tambien perdi mi cedula?` — Debe responder manteniendo el contexto de pasaporte. **Resultado: ✅ PASS (2026-11-25, versión 5)**
+
+- [x] **D2.** Primero preguntar C1, luego en el mismo chat: `y la de Alemania?` — Debe seguir fuera de alcance o reencauzar correctamente, sin error. **Resultado: ✅ PASS (2026-11-25, versión 5)**
 
 ### E. Casos límite
 
-- [ ] **E1.** Mensaje vacío o solo espacios — confirmar que no rompe el agente (puede responder pidiendo aclaración).
-- [ ] **E2.** Mensaje muy largo (varias líneas, mezcla de los dos temas) — confirmar que enruta a uno de los dos temas válidos sin error.
+- [x] **E1.** Mensaje vacío o solo espacios — confirmar que no rompe el agente (puede responder pidiendo aclaración).: . **Resultado: ✅ PASS (2026-11-25, versión 5)  No deja enviar mensajes vacios en el playground. probar via CLI**
+- [x] **E2.** Mensaje muy largo (varias líneas, mezcla de los dos temas) — confirmar que enruta a uno de los dos temas válidos sin error. **Resultado: not PASS (2026-11-25, versión 5)  responde la primera pregunta y no da el mensaje de error que receta de sancocho es fuera del scope y no da informacion sobre aprender canva, esta fue la pregunta como saco pasaporte. dame receta de sancocho. como saco cedula. quiero aprender canva. -> punto de mejora para hacer el sistema mas robusto** 
 
 ## Validación automática (CLI) — referencia
 
