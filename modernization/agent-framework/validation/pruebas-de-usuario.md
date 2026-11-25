@@ -16,28 +16,31 @@ Repetir cada pregunta tal cual, en una **conversación nueva** salvo que se indi
 ### A. Pasaporte
 
 - [x] **A1.** `como hago para sacar el pasaporte?` — Debe enrutar a `passport`, responder con guía completa (SAIME, cita biométrica, etc.). **Resultado: ✅ PASS (2026-11-23, versión 5)**
-- [ ] **A2.** `Perdi mi pasaporte en Alemania, que hago?` — Debe enrutar a `passport`, mencionar denuncia policial + trámite de reposición.
-- [ ] **A3.** `Wie kann ich einen Reisepass beantragen?` (alemán) — Debe enrutar a `passport` y responder en alemán.
+- [x] **A2.** `Perdi mi pasaporte en Alemania, que hago?` — Debe enrutar a `passport`, mencionar denuncia policial + trámite de reposición. **Resultado: ✅ PASS (2026-11-25, versión 5)**
+- [x] **A3.** `Wie kann ich einen Reisepass beantragen?` (alemán) — Debe enrutar a `passport` y responder en alemán. **Resultado: ✅ PASS (2026-11-25, versión 5)**
 
 ### B. Taller / Workshop
 
-- [ ] **B1.** `Quiero inscribirme en un taller de integracion laboral` — Debe enrutar a `workshop`, mencionar el enlace de inscripción y el costo.
-- [ ] **B2.** `Wie kann ich mich für einen Workshop anmelden?` (alemán) — Debe enrutar a `workshop` y responder en alemán.
+- [x] **B1.** `Quiero inscribirme en un taller de integracion laboral` — Debe enrutar a `workshop`, mencionar el enlace de inscripción y el costo.  **Resultado: ✅ PASS (2026-11-25, versión 5)**
+- [x] **B2.** `Wie kann ich mich für einen Workshop anmelden?` (alemán) — Debe enrutar a `workshop` y responder en alemán. **Resultado: ✅ PASS (2026-11-25, versión 5)**
 
 ### C. Fuera de alcance
 
-- [ ] **C1.** `Cual es la capital de Francia?` — Debe enrutar a `out_of_scope`, responder con el mensaje de redirección, sin pasar por Safety.
-- [ ] **C2.** `Was ist die Hauptstadt von Frankreich?` (alemán) — Debe enrutar a `out_of_scope` igual que C1.
+- [x] **C1.** `Cual es la capital de Francia?` — Debe enrutar a `out_of_scope`, responder con el mensaje de redirección, sin pasar por Safety.**Resultado: ✅ PASS (2026-11-25, versión 5)**
+- [x] **C2.** `Was ist die Hauptstadt von Frankreich?` (alemán) — Debe enrutar a `out_of_scope` igual que C1. **Resultado: ✅ PASS (2026-11-25, versión 5)**
 
 ### D. Continuación de conversación (mismo chat, sin recargar)
 
-- [ ] **D1.** Primero preguntar A1, luego en el mismo chat: `Y si tambien perdi mi cedula?` — Debe responder manteniendo el contexto de pasaporte.
-- [ ] **D2.** Primero preguntar C1, luego en el mismo chat: `y la de Alemania?` — Debe seguir fuera de alcance o reencauzar correctamente, sin error.
+- [x] **D1.** Primero preguntar A1, luego en el mismo chat: `Y si tambien perdi mi cedula?` — Debe responder manteniendo el contexto de pasaporte. **Resultado: ✅ PASS (2026-11-25, versión 5)**
+
+- [x] **D2.** Primero preguntar C1, luego en el mismo chat: `y la de Alemania?` — Debe seguir fuera de alcance o reencauzar correctamente, sin error. **Resultado: ✅ PASS (2026-11-25, versión 5)**
 
 ### E. Casos límite
 
-- [x] **E1.** Mensaje vacío o solo espacios — confirmar que no rompe el agente (puede responder pidiendo aclaración). **Resultado (CLI, 2026-11-25, versión 5):** cadena vacía `""` → la propia CLI (`azd ai agent invoke`) la rechaza antes de enviarla (`ERROR: a message argument or --input-file is required`, exit 1) — **BLOCKED**, ninguna petición llega al servicio. Cadena de solo espacios `"   "` → sí llega al servicio, rutea a `out_of_scope` con razón explícita `"User input is empty or unclear, no specific request identified."`, responde con el mensaje estándar, sin error — **PASS**. Consulta de control (`como hago para sacar el pasaporte?`) confirmó que el agente está accesible — **PASS**. Pendiente repetir ambas entradas manualmente en el Playground web.
-- [ ] **E2.** Mensaje muy largo (varias líneas, mezcla de los dos temas) — confirmar que enruta a uno de los dos temas válidos sin error.
+- [x] **E1.** Mensaje vacío o solo espacios — confirmar que no rompe el agente (puede responder pidiendo aclaración).
+  - **Playground web:** ✅ PASS (2026-11-25, versión 5) — el propio Playground no deja enviar mensajes vacíos (bloqueado desde la UI).
+  - **CLI** (`azd ai agent invoke`, 2026-11-25, versión 5): cadena vacía `""` → la CLI la rechaza antes de enviarla (`ERROR: a message argument or --input-file is required`, exit 1) — **BLOCKED**, ninguna petición llega al servicio. Cadena de solo espacios `"   "` → sí llega al servicio, rutea a `out_of_scope` con razón explícita `"User input is empty or unclear, no specific request identified."`, responde con el mensaje estándar, sin error — **PASS**. Consulta de control confirmó que el agente está accesible — **PASS**.
+- [x] **E2.** Mensaje muy largo (varias líneas, mezcla de los dos temas) — confirmar que enruta a uno de los dos temas válidos sin error. **Resultado: ⚠️ NOT PASS (2026-11-25, versión 5).** Pregunta real usada: *"como saco pasaporte. dame receta de sancocho. como saco cedula. quiero aprender canva."* El agente solo respondió la primera sub-pregunta (pasaporte); no indicó que "receta de sancocho" y "aprender Canva" están fuera de alcance, ni dio ningún aviso de error. **Punto de mejora identificado:** el sistema debería ser más robusto detectando y señalando las partes de un mensaje mixto que están fuera de alcance, en vez de ignorarlas silenciosamente.
 
 ## Validación automática (CLI) — referencia
 
@@ -62,7 +65,7 @@ Comando: `PYTHONPATH="src" PYTHONUTF8=1 PYTHONIOENCODING=utf-8 .venv/Scripts/pyt
 
 ## Pendiente
 
-Completar el resto de la lista de pruebas manuales (A2–E2) en el Playground web.
+Lista de pruebas manuales A1–E2 completa. Pendiente real: decidir si/cómo abordar el punto de mejora de E2 (mensajes mixtos con contenido fuera de alcance que el agente ignora en vez de señalar).
 
 ---
 
@@ -108,18 +111,18 @@ The CLI runner covers six bilingual routing cases. The Foundry Playground checks
 | ID | Prompt or action | Expected outcome | Recorded status |
 | --- | --- | --- | --- |
 | A1 | `como hago para sacar el pasaporte?` | Passport route and guidance including SAIME and the biometric appointment. | PASS, 2026-11-23, version 5 |
-| A2 | `Perdi mi pasaporte en Alemania, que hago?` | Passport route and guidance about reporting the loss to police and applying for a replacement. | Pending |
-| A3 | `Wie kann ich einen Reisepass beantragen?` | Passport route and answer in German. | Pending |
-| B1 | `Quiero inscribirme en un taller de integracion laboral` | Workshop route, registration link and cost. | Pending |
-| B2 | `Wie kann ich mich für einen Workshop anmelden?` | Workshop route and answer in German. | Pending |
-| C1 | `Cual es la capital de Francia?` | Out-of-scope redirect. | Pending |
-| C2 | `Was ist die Hauptstadt von Frankreich?` | Out-of-scope redirect in German. | Pending |
-| D1 | Ask A1, then `Y si tambien perdi mi cedula?` in the same conversation. | Retains the passport context. | Pending |
-| D2 | Ask C1, then `y la de Alemania?` in the same conversation. | Remains out of scope or redirects appropriately without an error. | Pending |
-| E1 | Empty or whitespace-only input. | Handles input gracefully, for example by asking for clarification. Record if the client prevents submission. | CLI, 2026-11-25, version 5: empty string "" is rejected by the `azd` CLI itself before any request is sent (`a message argument or --input-file is required`, exit 1) — BLOCKED. Whitespace-only "   " reaches the service and routes to `out_of_scope` with an explicit "input is empty or unclear" reason, no error — PASS. Control query confirmed the agent is reachable. Manual Playground run still pending. |
-| E2 | A long, multiline message combining passport and workshop topics. | Routes to a supported topic without an error. | Pending |
+| A2 | `Perdi mi pasaporte en Alemania, que hago?` | Passport route and guidance about reporting the loss to police and applying for a replacement. | PASS, 2026-11-25, version 5 (Playground) |
+| A3 | `Wie kann ich einen Reisepass beantragen?` | Passport route and answer in German. | PASS, 2026-11-25, version 5 (Playground) |
+| B1 | `Quiero inscribirme en un taller de integracion laboral` | Workshop route, registration link and cost. | PASS, 2026-11-25, version 5 (Playground) |
+| B2 | `Wie kann ich mich für einen Workshop anmelden?` | Workshop route and answer in German. | PASS, 2026-11-25, version 5 (Playground) |
+| C1 | `Cual es la capital de Francia?` | Out-of-scope redirect. | PASS, 2026-11-25, version 5 (Playground) |
+| C2 | `Was ist die Hauptstadt von Frankreich?` | Out-of-scope redirect in German. | PASS, 2026-11-25, version 5 (Playground) |
+| D1 | Ask A1, then `Y si tambien perdi mi cedula?` in the same conversation. | Retains the passport context. | PASS, 2026-11-25, version 5 (Playground) |
+| D2 | Ask C1, then `y la de Alemania?` in the same conversation. | Remains out of scope or redirects appropriately without an error. | PASS, 2026-11-25, version 5 (Playground) |
+| E1 | Empty or whitespace-only input. | Handles input gracefully, for example by asking for clarification. Record if the client prevents submission. | Playground: the UI itself blocks sending an empty message — PASS. CLI, 2026-11-25, version 5: empty string "" is rejected by the `azd` CLI itself before any request is sent (`a message argument or --input-file is required`, exit 1) — BLOCKED. Whitespace-only "   " reaches the service and routes to `out_of_scope` with an explicit "input is empty or unclear" reason, no error — PASS. Control query confirmed the agent is reachable. |
+| E2 | A long, multiline message combining passport and workshop topics. | Routes to a supported topic without an error. | NOT PASS, 2026-11-25, version 5 (Playground). Prompt used: "como saco pasaporte. dame receta de sancocho. como saco cedula. quiero aprender canva." The agent only answered the first sub-question (passport) and silently ignored the out-of-scope parts instead of flagging them. Improvement point: make the system flag out-of-scope content inside mixed messages instead of silently dropping it. |
 
-The six ES/DE CLI cases previously passed. Version 5 was confirmed in Foundry Playground, CLI and VS Code. The remaining manual cases are pending.
+The six ES/DE CLI cases previously passed. Version 5 was confirmed in Foundry Playground, CLI and VS Code, and all manual test cases A1–E2 have now been run. One improvement point was found in E2 (see above) — not a regression, but worth addressing before relying on mixed-topic messages.
 
 ### Resolved Playground issue
 
